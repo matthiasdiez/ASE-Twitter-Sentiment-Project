@@ -6,8 +6,8 @@ import model.repositories.CustomerRepository;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.create;
 import views.html.login;
+import views.html.register;
 import application.Constants;
 
 public class SessionController extends Controller {
@@ -50,14 +50,17 @@ public class SessionController extends Controller {
     return redirect(routes.MainController.index());
   }
 
-  public Result create() {
-    return ok(create.render(form(Customer.class)));
+  public Result register() {
+    return ok(register.render(form(Customer.class)));
   }
 
-  public Result createHandler() {
+  public Result registerHandler() {
+    // TODO check if name does not yet exist
+    // TODO check if pw ok (genug lang)
+    // TODO check if name ok (genug lang und keine sonderzeichen/leerschläge)
     final Form<Customer> customerForm = form(Customer.class).bindFromRequest();
     if (customerForm.hasErrors()) {
-      return badRequest(create.render(customerForm));
+      return badRequest(register.render(customerForm));
     }
     else {
       final Customer customer = customerForm.get();

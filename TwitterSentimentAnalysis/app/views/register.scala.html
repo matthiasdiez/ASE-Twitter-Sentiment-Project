@@ -1,0 +1,32 @@
+@(form: play.data.Form[model.core.Customer])
+
+<html>
+  <head>
+    <title>Create new Customer account</title>
+    
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/common.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/signin.css")">
+  </head>
+  <body>
+  
+    <div id="main" class="container">
+      <h2>Create new Account</h2>
+	    @helper.form(routes.SessionController.registerHandler, 'id -> "form-signin") {
+	      
+	      @if(form.hasGlobalErrors) {
+	        <p class="alert alert-danger">@form.globalError.message</p>
+	      }
+	      
+	      <p><input type="text" class="form-control" name="name" placeholder="name" value="@form("name").value"></p>
+	      <p><input type="text" class="form-control" name="password" placeholder="password"></p>
+	      <p><button type="submit" class="btn btn-lg btn-primary btn-block">Register</button></p>
+	    }
+    </div>
+    
+  </body>
+</html>
+    
+
+
