@@ -1,0 +1,36 @@
+@(form: play.data.Form[SessionController.Login])
+
+<html>
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        
+        @helper.form(routes.SessionController.loginHandler) {
+            
+            <h1>Login</h1>
+            
+            @if(form.hasGlobalErrors) { 
+                <p class="error">
+                    @form.globalError.message
+                </p>
+            }
+            
+            <p>
+                <input type="text" name="name" placeholder="name" value="@form("name").value">
+            </p>
+            <p>
+                <input type="password" name="password" placeholder="password">
+            </p>
+            <p>
+                <button type="submit">Login</button>
+            </p>
+            
+        }
+        <a href="@routes.SessionController.create()">Create new account</a>
+            
+    </body>
+</html>
+    
+
+

@@ -1,0 +1,33 @@
+@(form: play.data.Form[model.core.Customer])
+
+<html>
+    <head>
+        <title>Create new Customer account</title>
+    </head>
+    <body>
+        
+        @helper.form(routes.SessionController.createHandler) {
+            
+            @if(form.hasGlobalErrors) { 
+                <p class="error">
+                    @form.globalError.message
+                </p>
+            }
+            
+            <p>
+                <input type="text" name="name" placeholder="name" value="@form("name").value">
+            </p>
+            <p>
+                <input type="text" name="password" placeholder="password">
+            </p>
+            <p>
+                <button type="submit">Register</button>
+            </p>
+            
+        }
+            
+    </body>
+</html>
+    
+
+

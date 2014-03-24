@@ -2,8 +2,18 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           @controllers.Application.index()
+# Main Pages
+GET    /               @controllers.MainController.index()
+GET    /app            @controllers.MainController.app()
+#TODO remove
+GET    /app/test       @controllers.MainController.test() 
+
+# Authentication
+GET    /login          @controllers.SessionController.login(redirect: String ?= null)
+POST   /login          @controllers.SessionController.loginHandler
+GET    /logout         @controllers.SessionController.logout()
+GET    /create         @controllers.SessionController.create()
+POST   /create         @controllers.SessionController.createHandler()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET    /assets/*file   controllers.Assets.at(path="/public", file)

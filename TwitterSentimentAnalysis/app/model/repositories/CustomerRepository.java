@@ -7,4 +7,6 @@ public interface CustomerRepository extends BaseRepository<Customer> {
 
   public static final CustomerRepository INSTANCE = new CustomerRepositoryImpl();
 
+  public Customer one(String name, String password);
+
 }

@@ -13,4 +13,9 @@ public class CustomerRepositoryImpl extends AbstractBaseRepositoryImpl<Customer>
     return finder;
   }
 
+  @Override
+  public Customer one(final String name, final String password) {
+    return finder.where().eq("name", name).eq("password", password).findUnique();
+  }
+
 }
