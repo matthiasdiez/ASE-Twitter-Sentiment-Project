@@ -9,29 +9,28 @@ public class MainTwitterSentiment {
 
 	/**
 	 * @param args
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		System.out.println("Sample program from twitter-sentiment-analysis");
-		
-		ClassifierBuilder clb = new ClassifierBuilder();
-		Options opt = new Options();
+
+		final ClassifierBuilder clb = new ClassifierBuilder();
+		final Options opt = new Options();
 		clb.setOpt(opt);
-		//seleziona solo i termini utilizzati più di una volta
+		// seleziona solo i termini utilizzati piÔøΩ di una volta
 		opt.setSelectedFeaturesByFrequency(true);
-		//seleziona solamente 150 termini
+		// seleziona solamente 150 termini
 		opt.setNumFeatures(150);
-		//rimuove le emoticons
+		// rimuove le emoticons
 		opt.setRemoveEmoticons(true);
-		//prepara le strutture dati per il train e il test
+		// prepara le strutture dati per il train e il test
 		clb.prepareTrain();
 		clb.prepareTest();
-		//classificatore Weka
-		NaiveBayes nb = new NaiveBayes();
-		//costruzione e memorizzazione su disco del classificatore
-		WekaClassifier wc = clb.constructClassifier(nb);
-		//classificazione di un tweet
+		// classificatore Weka
+		final NaiveBayes nb = new NaiveBayes();
+		// costruzione e memorizzazione su disco del classificatore
+		final WekaClassifier wc = clb.constructClassifier(nb);
+		// classificazione di un tweet
 		wc.classify("i am very sad");
 	}
-
 }
