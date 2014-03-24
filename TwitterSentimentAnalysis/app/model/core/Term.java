@@ -18,13 +18,13 @@ public class Term extends Model implements Identifiable {
 
   @Required
   @ManyToOne
-  private final Customer owner;
+  private final Analysis analysis;
 
   @Required
   private final String content;
 
-  public Term(final Customer owner, final String content) {
-    this.owner = owner;
+  public Term(final Analysis analysis, final String content) {
+    this.analysis = analysis;
     this.content = content;
   }
 

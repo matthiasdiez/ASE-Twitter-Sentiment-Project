@@ -4,13 +4,10 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import model.base.Identifiable;
-
-import org.joda.time.DateTime;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -24,19 +21,13 @@ public class Analysis extends Model implements Identifiable {
 
   @Required
   @ManyToOne
-  private Customer owner;
+  private final Customer owner;
 
-  @ManyToMany
+  @OneToMany(mappedBy = "analysis")
   private List<Term> terms;
 
-  @Required
-  private final DateTime startDateTime;
-  @Required
-  private final DateTime endDateTime;
-
-  public Analysis(final DateTime startDateTime, final DateTime endDateTime) {
-    this.startDateTime = startDateTime;
-    this.endDateTime = endDateTime;
+  public Analysis(final Customer owner) {
+    this.owner = owner;
   }
 
   @Override
@@ -44,12 +35,8 @@ public class Analysis extends Model implements Identifiable {
     return id;
   }
 
-  public DateTime getStartDateTime() {
-    return startDateTime;
-  }
-
-  public DateTime getEndDateTime() {
-    return endDateTime;
+  public Customer getOwner() {
+    return owner;
   }
 
 }

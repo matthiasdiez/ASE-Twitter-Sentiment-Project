@@ -21,9 +21,6 @@ public class Customer extends Model implements Identifiable {
   private String password;
 
   @OneToMany(mappedBy = "owner")
-  private List<Term> terms;
-
-  @OneToMany(mappedBy = "owner")
   private List<Analysis> analysis;
 
   public Customer(final String name, final String password) {
