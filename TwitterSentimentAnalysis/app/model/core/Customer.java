@@ -7,7 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import model.base.Identifiable;
+import model.factories.AnalysisFactory;
+import model.repositories.AnalysisRepository;
 import play.db.ebean.Model;
+
+import com.google.common.collect.ImmutableList;
 
 @Entity
 public class Customer extends Model implements Identifiable {
@@ -21,7 +25,7 @@ public class Customer extends Model implements Identifiable {
   private String password;
 
   @OneToMany(mappedBy = "owner")
-  private List<Analysis> analysis;
+  private List<Analysis> analyses;
 
   public Customer(final String name, final String password) {
     this.name = name;
@@ -47,6 +51,32 @@ public class Customer extends Model implements Identifiable {
 
   public void setPassword(final String password) {
     this.password = password;
+  }
+
+  public List<Analysis> getAnalysis() {
+    return ImmutableList.copyOf(analyses);
+  }
+
+  public Analysis addAnalysis() {
+    final Analysis analysis = AnalysisFactory.INSTANCE.create(this);
+    AnalysisRepository.INSTANCE.store(analysis);
+    return AnalysisRepository.INSTANCE.one(analysis.getId());
+  }
+
+  @Override
+  public void save() {
+    for (final Analysis analysis : analyses) {
+      analysis.save();
+    }
+    super.save();
+  }
+
+  @Override
+  public void delete() {
+    for (final Analysis analysis : analyses) {
+      analysis.delete();
+    }
+    super.delete();
   }
 
 }

@@ -33,8 +33,11 @@ public class Term extends Model implements Identifiable {
     return id;
   }
 
+  public Analysis getAnalysis() {
+    return analysis;
+  }
+
   public String getContent() {
     return content;
   }
-
 }
