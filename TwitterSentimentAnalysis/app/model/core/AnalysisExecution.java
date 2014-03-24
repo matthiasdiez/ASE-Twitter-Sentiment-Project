@@ -3,6 +3,7 @@ package model.core;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import model.base.Identifiable;
 
@@ -20,6 +21,7 @@ public class AnalysisExecution extends Model implements Identifiable {
   private Long id;
 
   @Required
+  @ManyToOne
   private final Analysis analysis;
 
   @Required
