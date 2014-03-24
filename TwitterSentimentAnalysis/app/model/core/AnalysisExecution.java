@@ -24,9 +24,7 @@ public class AnalysisExecution extends Model implements Identifiable {
   @ManyToOne
   private final Analysis analysis;
 
-  @Required
   private DateTime startDateTime;
-  @Required
   private DateTime endDateTime;
 
   @Embedded

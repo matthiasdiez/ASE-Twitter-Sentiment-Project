@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import model.base.Identifiable;
 import model.factories.AnalysisFactory;
 import model.repositories.AnalysisRepository;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.google.common.collect.ImmutableList;
@@ -21,7 +22,9 @@ public class Customer extends Model implements Identifiable {
   @Id
   private Long id;
 
+  @Required
   private String name;
+  @Required
   private String password;
 
   @OneToMany(mappedBy = "owner")
