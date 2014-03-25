@@ -17,20 +17,20 @@ public class MainTwitterSentiment {
 		final ClassifierBuilder clb = new ClassifierBuilder();
 		final Options opt = new Options();
 		clb.setOpt(opt);
-		// seleziona solo i termini utilizzati pi� di una volta
+		// only select terms with are used more than once
 		opt.setSelectedFeaturesByFrequency(true);
-		// seleziona solamente 150 termini
-		opt.setNumFeatures(150);
-		// rimuove le emoticons
+		// only select 150 features
+		opt.setNumFeatures(10000);
+		// ignore / remove emoticons
 		opt.setRemoveEmoticons(true);
-		// prepara le strutture dati per il train e il test
+		// prepare the data structure for test and train (part of initialization?
 		clb.prepareTrain();
 		clb.prepareTest();
-		// classificatore Weka
+		// use naive bayes (for statistical results)
 		final NaiveBayes nb = new NaiveBayes();
-		// costruzione e memorizzazione su disco del classificatore
+		// initialize Weka classifier
 		final WekaClassifier wc = clb.constructClassifier(nb);
-		// classificazione di un tweet
-		wc.classify("i am very sad");
+		// classify given tweet (as string)
+		System.out.println(wc.classify("i am very sad"));
 	}
 }
