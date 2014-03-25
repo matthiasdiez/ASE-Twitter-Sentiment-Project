@@ -54,9 +54,6 @@ public class SessionController extends Controller {
   }
 
   public Result registerHandler() {
-    // TODO check if name does not yet exist
-    // TODO check if pw ok (genug lang)
-    // TODO check if name ok (genug lang und keine sonderzeichen/leerschläge)
     final Form<Customer> customerForm = form(Customer.class).bindFromRequest();
     if (customerForm.hasErrors()) {
       return badRequest(register.render(customerForm));
