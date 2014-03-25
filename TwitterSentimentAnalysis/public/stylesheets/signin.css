@@ -1,0 +1,13 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+#main {
+  max-width: 330px;
+  margin: 0 auto;
+}
+
+#form-signin {
+	padding-top: 10px;
+}

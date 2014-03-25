@@ -1,0 +1,33 @@
+@(form: play.data.Form[SessionController.Login])
+
+<html>
+  <head>
+    <title>Login</title>
+      
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/common.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/signin.css")">
+  </head>
+  <body>
+  
+    <div id="main" class="container">
+	    <h2>Login</h2>
+	    @helper.form(routes.SessionController.loginHandler, 'id -> "form-signin") {
+	      
+	      @if(form.hasGlobalErrors) { 
+	        <p class="alert alert-danger">@form.globalError.message</p>
+	      }
+	      
+	      <p><input type="text" class="form-control" name="name" placeholder="Name" value="@form("name").value"></p>
+	      <p><input type="password" class="form-control" name="password" placeholder="Password"></p>
+	      <p><button type="submit" class="btn btn-lg btn-primary btn-block">Login</button></p>
+	    }
+	    <a class="right" href="@routes.SessionController.register()">Create a new Account</a>
+    </div>
+    
+  </body>
+</html>
+    
+
+
