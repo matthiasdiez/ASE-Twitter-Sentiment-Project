@@ -9,12 +9,12 @@ import controllers.authentication.CustomerAuthenticator;
 public class MainController extends Controller {
 
   public Result index() {
-    return ok(index.render("Your new application is ready."));
+    return ok(index.render());
   }
 
   @Authenticated(CustomerAuthenticator.class)
   public Result app() {
-    return ok("Main App Page");
+    return ok(views.html.app.render("Twitter Minder"));
   }
 
   // TODO remove

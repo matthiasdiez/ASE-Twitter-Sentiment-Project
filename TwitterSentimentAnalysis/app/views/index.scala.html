@@ -1,7 +1,16 @@
-@(message: String)
+<!DOCTYPE html>
 
-@main("Welcome to Play") {
+<html>
+  <head>
+    <title>Twitter Minder</title>
+      
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+  </head>
+  <body>
+  
+    <p>Twitter Minder Application<p>
 
-    @play20.welcome(message, style = "Java")
-
-}
+    <a href="@routes.SessionController.login()">Login</a>
+    
+  </body>
+</html>
