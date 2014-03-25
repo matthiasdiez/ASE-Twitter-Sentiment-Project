@@ -1,4 +1,6 @@
 @(form: play.data.Form[model.core.Customer])
+@import views.html.helper.FieldConstructor
+@import views.html.fieldconstructors.inputFieldConstructor
 
 <html>
   <head>
@@ -13,14 +15,15 @@
   
     <div id="main" class="container">
       <h2>Create new Account</h2>
+      @implicitField = @{ FieldConstructor(inputFieldConstructor.f) }
 	    @helper.form(routes.SessionController.registerHandler, 'id -> "form-signin") {
 	      
 	      @if(form.hasGlobalErrors) {
 	        <p class="alert alert-danger">@form.globalError.message</p>
 	      }
 	      
-	      <p><input type="text" class="form-control" name="name" placeholder="name" value="@form("name").value"></p>
-	      <p><input type="text" class="form-control" name="password" placeholder="password"></p>
+	      @helper.inputText(form("name"), 'class -> "form-control", 'placeholder -> "Name",'_label -> "Name")
+        @helper.inputPassword(form("password"), 'class -> "form-control", 'placeholder -> "Password",'_label -> "Password")
 	      <p><button type="submit" class="btn btn-lg btn-primary btn-block">Register</button></p>
 	    }
     </div>

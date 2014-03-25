@@ -9,19 +9,18 @@ import play.mvc.Result;
 import views.html.login;
 import views.html.register;
 import application.Constants;
+import application.Messages;
 
 public class SessionController extends Controller {
 
   public static class Login {
-
-    private static final String INVALID_CREDENTIALS_MESSAGE = "Invalid user or password";
 
     public String name;
     public String password;
 
     public String validate() {
       if (CustomerRepository.INSTANCE.one(name, password) == null) {
-        return INVALID_CREDENTIALS_MESSAGE;
+        return Messages.INVALID_CREDENTIALS_MESSAGE;
       }
       return null;
     }
