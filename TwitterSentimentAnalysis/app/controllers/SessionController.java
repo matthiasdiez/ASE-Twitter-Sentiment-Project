@@ -6,8 +6,6 @@ import model.repositories.CustomerRepository;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.login;
-import views.html.register;
 import application.Constants;
 import application.Messages;
 
@@ -31,13 +29,13 @@ public class SessionController extends Controller {
     if (redirect != null) {
       session(Constants.SESSION_KEY_REDIRECT_AFTER_LOGIN, redirect);
     }
-    return ok(login.render(form(Login.class)));
+    return ok(views.html.login.render(form(Login.class)));
   }
 
   public Result loginHandler() {
     final Form<Login> loginForm = form(Login.class).bindFromRequest();
     if (loginForm.hasErrors()) {
-      return badRequest(login.render(loginForm));
+      return badRequest(views.html.login.render(loginForm));
     }
     else {
       return finishLogin(loginForm.get().name);
@@ -50,13 +48,13 @@ public class SessionController extends Controller {
   }
 
   public Result register() {
-    return ok(register.render(form(Customer.class)));
+    return ok(views.html.register.render(form(Customer.class)));
   }
 
   public Result registerHandler() {
     final Form<Customer> customerForm = form(Customer.class).bindFromRequest();
     if (customerForm.hasErrors()) {
-      return badRequest(register.render(customerForm));
+      return badRequest(views.html.register.render(customerForm));
     }
     else {
       final Customer customer = customerForm.get();
@@ -80,6 +78,6 @@ public class SessionController extends Controller {
       session().remove(Constants.SESSION_KEY_REDIRECT_AFTER_LOGIN);
       return redirect(redirectUrl);
     }
-    return redirect(routes.MainController.app());
+    return redirect(routes.AppController.app());
   }
 }
