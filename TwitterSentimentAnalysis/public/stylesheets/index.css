@@ -1,3 +1,7 @@
+#main {
+  max-width: 750px;
+}
+
 .container .jumbotron {
 	margin: 0;
 	padding: 20;

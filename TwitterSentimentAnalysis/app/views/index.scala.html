@@ -5,8 +5,16 @@
 @views.html.base.centered(Messages("pages.index.title"), stylesheets) {
 
   <div class="jumbotron">
-    <h1>Welcome</h1>
-    <p class="lead">TODO info text</p>
+    <h1>About TwitterMinder</h1>
+    <p class="lead">This application has been implemented as part of the course <a href="http://www.ifi.uzh.ch/seal/teaching/courses/ase14.html" target="_blank">Advanced Software Engineering</a> to investigate the characteristics of an elastic system. The application provides a service to examine the opinion on Twitter about some terms.</p>
+    <h2>Authors (Group 2)</h2>
+    <ul id="authors">
+      <li>Michael K&uuml;ndig</li>
+      <li>Matthias Diez</li>
+      <li>Jessica Hediger</li>
+      <li>Gregory Wyss</li>
+      <li>Christian Bosshard</li>
+    </ul>
     <p><a class="btn btn-lg btn-success" href="@routes.AppController.dashboard()" role="button">Start application</a></p>
   </div>
   
