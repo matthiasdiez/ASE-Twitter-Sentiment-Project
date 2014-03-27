@@ -1,4 +1,4 @@
-@(title: String, stylesheets: Html = Html(""), scripts: Html = Html(""))(content: Html)
+@(title: String, stylesheets: Html = Html(""), scipts: Html = Html(""))(body: Html)
 
 @import views.html.navbar.navbar
 
@@ -13,23 +13,15 @@
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
     
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/common.css")">
     @stylesheets
   </head>
   <body>
   
-    @* NAVBAR *@
-    @navbar()
-    
-    @* CONTENT *@
-    <div id="main" class="container">
-      <h1>@title</h1>
-      @content
-    </div>
+    @body
     
     <script src="@routes.Assets.at("javascripts/jquery-1.11.0.min.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
-    @scripts
+    @scipts
   </body>
 </html>

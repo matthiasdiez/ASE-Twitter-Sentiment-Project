@@ -1,0 +1,14 @@
+@(title: String, stylesheets: Html = Html(""), scripts: Html = Html(""))(content: Html)
+
+@allStylesheets = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/centered.css")">
+    @stylesheets
+}
+
+@views.html.base.base(title, allStylesheets, scripts) {
+  
+  <div id="main" class="container">
+    @content
+  </div>
+  
+}

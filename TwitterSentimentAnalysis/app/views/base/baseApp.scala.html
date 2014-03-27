@@ -1,0 +1,25 @@
+@(title: String, stylesheets: Html = Html(""), scripts: Html = Html(""))(content: Html)
+
+@import views.html.navbar.navbar
+
+@allStylesheets = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+    @stylesheets
+}
+
+@views.html.base.base(title, allStylesheets, scripts) {
+  
+  @*********
+  * NAVBAR *
+  *********@
+  @navbar()
+  
+  @**********
+  * CONTENT *
+  **********@
+  <div id="main" class="container">
+    <h1>@title</h1>
+    @content
+  </div>
+  
+}
