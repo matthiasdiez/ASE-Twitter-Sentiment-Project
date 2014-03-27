@@ -7,7 +7,7 @@
 
 @views.html.base.baseApp("Create a new analysis") {
 
-    @helper.form(routes.SessionController.registerHandler, 'id -> "form-create-analysis") {
+    @helper.form(routes.AppController.createAnalysis, 'id -> "form-create-analysis") {
       
       @if(form.hasGlobalErrors) {
         <p class="alert alert-danger">@form.globalError.message</p>

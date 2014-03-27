@@ -3,20 +3,23 @@
 # ~~~~
 
 # Main
-GET    /                  @controllers.MainController.index()
+GET    /                                         @controllers.MainController.index()
 
 # App
-GET    /app               @controllers.AppController.dashboard()
-GET    /analysis          @controllers.AppController.listAnalyses()
-GET    /analysis/create   @controllers.AppController.createAnalysis()
-POST   /analysis/create   @controllers.AppController.addAnalysis()
+GET    /app                                      @controllers.AppController.dashboard()
+GET    /analysis                                 @controllers.AppController.listAnalyses()
+GET    /analysis/create                          @controllers.AppController.createAnalysis()
+POST   /analysis/create                          @controllers.AppController.addAnalysis()
+GET    /analysis/:analysisId/executions          @controllers.AppController.listAnalysisExecutions(analysisId: Long)
+GET    /analysis/:analysisId/executions/create   @controllers.AppController.createAnalysisExecution(analysisId: Long)
+POST   /analysis/executions/add                  @controllers.AppController.addAnalysisExecution()
 
 # Authentication
-GET    /login             @controllers.SessionController.login(redirect: String ?= null)
-POST   /login             @controllers.SessionController.loginHandler
-GET    /logout            @controllers.SessionController.logout()
-GET    /register          @controllers.SessionController.register()
-POST   /register          @controllers.SessionController.registerHandler()
+GET    /login                                    @controllers.SessionController.login(redirect: String ?= null)
+POST   /login                                    @controllers.SessionController.loginHandler
+GET    /logout                                   @controllers.SessionController.logout()
+GET    /register                                 @controllers.SessionController.register()
+POST   /register                                 @controllers.SessionController.registerHandler()
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file      controllers.Assets.at(path="/public", file)
+GET    /assets/*file                             controllers.Assets.at(path="/public", file)
