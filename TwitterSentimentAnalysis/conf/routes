@@ -3,19 +3,20 @@
 # ~~~~
 
 # Main
-GET    /                 @controllers.MainController.index()
+GET    /                  @controllers.MainController.index()
 
 # App
-GET    /app              @controllers.AppController.app()
-GET    /analyse          @controllers.AppController.listAnalyses()
-GET    /analyse/create   @controllers.AppController.createAnalyse()
+GET    /app               @controllers.AppController.dashboard()
+GET    /analysis          @controllers.AppController.listAnalyses()
+GET    /analysis/create   @controllers.AppController.createAnalysis()
+POST   /analysis/create   @controllers.AppController.addAnalysis()
 
 # Authentication
-GET    /login            @controllers.SessionController.login(redirect: String ?= null)
-POST   /login            @controllers.SessionController.loginHandler
-GET    /logout           @controllers.SessionController.logout()
-GET    /register         @controllers.SessionController.register()
-POST   /register         @controllers.SessionController.registerHandler()
+GET    /login             @controllers.SessionController.login(redirect: String ?= null)
+POST   /login             @controllers.SessionController.loginHandler
+GET    /logout            @controllers.SessionController.logout()
+GET    /register          @controllers.SessionController.register()
+POST   /register          @controllers.SessionController.registerHandler()
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file     controllers.Assets.at(path="/public", file)
+GET    /assets/*file      controllers.Assets.at(path="/public", file)

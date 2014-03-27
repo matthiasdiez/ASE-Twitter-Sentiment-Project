@@ -10,9 +10,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="@routes.AppController.app()">
+      <a class="navbar-brand" href="@routes.AppController.dashboard()">
         <img id="logo" src="@routes.Assets.at("images/logo-navbar.png")" />
-        <span id="brand-text">Twitter Minder</span>
+        <span id="brand-text">@Messages("app.title")</span>
       </a>
     </div>
     
@@ -20,11 +20,11 @@
     
       <ul class="nav navbar-nav">
         @menuItem(routes.AppController.listAnalyses().url, Messages("menu.listanalyses"))
-        @menuItem(routes.AppController.createAnalyse().url, Messages("menu.createanalyse"))
+        @menuItem(routes.AppController.createAnalysis().url, Messages("menu.createanalyse"))
       </ul>
       
       <form class="navbar-form navbar-right" role="form">
-        <a class="btn btn-success" href="@routes.SessionController.logout()" role="button">Logout</a>
+        <a class="btn btn-success" href="@routes.SessionController.logout()" role="button">@Messages("buttons.logout")</a>
       </form>
       <span id="user-label" class="navbar-right">@session.get("username")</span>
           

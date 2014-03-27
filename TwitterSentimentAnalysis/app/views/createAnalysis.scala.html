@@ -1,0 +1,21 @@
+@(form: play.data.Form[model.core.Analysis])
+
+@import views.html.helper.FieldConstructor
+@import views.html.fieldconstructors.inputFieldConstructor
+
+@implicitField = @{ FieldConstructor(inputFieldConstructor.f) }
+
+@views.html.base.main("Create a new analysis") {
+
+    @helper.form(routes.SessionController.registerHandler, 'id -> "form-create-analysis") {
+      
+      @if(form.hasGlobalErrors) {
+        <p class="alert alert-danger">@form.globalError.message</p>
+      }
+      
+      @helper.inputText(form("name"), 'class -> "form-control", 'placeholder -> "Name",'_label -> "Name")
+      
+      <p><button type="submit" class="btn btn-lg btn-primary btn-block">@Messages("buttons.create")</button></p>
+    }
+
+}

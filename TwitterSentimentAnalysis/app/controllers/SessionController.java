@@ -78,6 +78,6 @@ public class SessionController extends Controller {
       session().remove(Constants.SESSION_KEY_REDIRECT_AFTER_LOGIN);
       return redirect(redirectUrl);
     }
-    return redirect(routes.AppController.app());
+    return redirect(routes.AppController.dashboard());
   }
 }

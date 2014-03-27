@@ -8,6 +8,6 @@ public interface AnalysisFactory {
 
   public static final AnalysisFactory INSTANCE = new AnalysisFactoryImpl();
 
-  public Analysis create(final Customer owner);
+  public Analysis create(final Customer owner, String name);
 
 }

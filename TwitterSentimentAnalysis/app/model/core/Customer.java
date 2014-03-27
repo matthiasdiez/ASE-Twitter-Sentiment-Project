@@ -71,8 +71,8 @@ public class Customer extends Model implements Identifiable {
     return ImmutableList.copyOf(analyses);
   }
 
-  public Analysis addAnalysis() {
-    final Analysis analysis = AnalysisFactory.INSTANCE.create(this);
+  public Analysis addAnalysis(final String name) {
+    final Analysis analysis = AnalysisFactory.INSTANCE.create(this, name);
     AnalysisRepository.INSTANCE.store(analysis);
     return AnalysisRepository.INSTANCE.one(analysis.getId());
   }

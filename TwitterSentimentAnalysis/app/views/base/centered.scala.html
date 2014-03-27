@@ -1,0 +1,24 @@
+@(title: String, stylesheets: Html = Html(""), scripts: Html = Html(""))(content: Html)
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>@Messages("app.title") - @title</title>
+      
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/common.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/centered.css")">
+    @stylesheets
+  </head>
+  <body>
+  
+    <div id="main" class="container">
+      @content
+    </div>
+    
+    @scripts
+  </body>
+</html>

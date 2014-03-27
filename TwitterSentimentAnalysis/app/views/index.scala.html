@@ -1,16 +1,13 @@
-<!DOCTYPE html>
+@stylesheets = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
+}
 
-<html>
-  <head>
-    <title>Twitter Minder</title>
-      
-    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-  </head>
-  <body>
+@views.html.base.centered(Messages("pages.index.title"), stylesheets) {
+
+  <div class="jumbotron">
+    <h1>Welcome</h1>
+    <p class="lead">TODO info text</p>
+    <p><a class="btn btn-lg btn-success" href="@routes.AppController.dashboard()" role="button">Start application</a></p>
+  </div>
   
-    <p>Twitter Minder Application<p>
-
-    <a href="@routes.SessionController.login()">Login</a>
-    
-  </body>
-</html>
+}

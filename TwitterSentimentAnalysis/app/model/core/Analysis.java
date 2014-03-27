@@ -27,13 +27,16 @@ public class Analysis extends Model implements Identifiable {
   @ManyToOne
   private final Customer owner;
 
+  @Required
+  private String name;
+
   @OneToMany(mappedBy = "analysis")
   private List<Term> terms;
 
   @OneToMany(mappedBy = "analysis")
   private List<AnalysisExecution> executions;
 
-  public Analysis(final Customer owner) {
+  public Analysis(final Customer owner, final String name) {
     this.owner = owner;
   }
 
@@ -44,6 +47,14 @@ public class Analysis extends Model implements Identifiable {
 
   public Customer getOwner() {
     return owner;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(final String name) {
+    this.name = name;
   }
 
   public List<Term> getTerms() {
