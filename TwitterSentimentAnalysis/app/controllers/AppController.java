@@ -2,17 +2,20 @@ package controllers;
 
 import model.core.Analysis;
 import model.core.AnalysisExecution;
+import model.core.Customer;
+import model.repositories.CustomerRepository;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security.Authenticated;
+import application.Constants;
 import controllers.authentication.CustomerAuthenticator;
 
 @Authenticated(CustomerAuthenticator.class)
 public class AppController extends Controller {
 
   public Result dashboard() {
-    return ok(views.html.dashboard.render());
+    return ok(views.html.dashboard.render(getAuthenticatedCustomer().getAnalysis()));
   }
 
   public Result listAnalyses() {
@@ -39,5 +42,9 @@ public class AppController extends Controller {
 
   public Result addAnalysisExecution() {
     return TODO;
+  }
+
+  private Customer getAuthenticatedCustomer() {
+    return CustomerRepository.INSTANCE.one(session(Constants.SESSION_KEY_NAME));
   }
 }

@@ -1,0 +1,12 @@
+@(analyses: List[model.core.Analysis])
+
+<h2>My Analyses</h2>
+@if(analyses.isEmpty()) {
+  You did not yet specify an analysis.
+} else {
+  <ul>
+    @for(analysis <- analyses) {
+      <li>@analysis.getName()</li>
+    }
+  </ul>
+}

@@ -1,5 +1,9 @@
+@(analyses: List[model.core.Analysis])
+
+@import views.html.content.listAnalyses
+
 @views.html.base.baseApp(Messages("pages.dashboard.title")) {
 
-    App content goes here
+    @listAnalyses(analyses)
 
 }
