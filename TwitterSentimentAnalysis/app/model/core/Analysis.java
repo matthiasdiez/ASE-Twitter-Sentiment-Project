@@ -12,8 +12,12 @@ import javax.persistence.ManyToOne;
 import model.base.Identifiable;
 import model.factories.TermFactory;
 import model.repositories.TermRepository;
+
+import org.joda.time.DateTime;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import util.DateTimeUtil;
 
 import com.google.common.collect.ImmutableList;
 
@@ -33,6 +37,9 @@ public class Analysis extends Model implements Identifiable {
 
   @ManyToMany
   private final List<Term> terms = new ArrayList<Term>();
+
+  private DateTime startDateTime;
+  private DateTime endDateTime;
 
   public Analysis(final Customer owner, final String name) {
     this.owner = owner;
@@ -91,6 +98,43 @@ public class Analysis extends Model implements Identifiable {
   public void removeTerm(final Term term) {
     terms.remove(term);
     this.save();
+  }
+
+  public DateTime getStartDateTime() {
+    return startDateTime;
+  }
+
+  public boolean setStartDateTime(final DateTime startDateTime) {
+    if (this.startDateTime == null) {
+      this.startDateTime = DateTimeUtil.nowOrLater(startDateTime);
+      return true;
+    }
+    return false;
+  }
+
+  public DateTime getEndDateTime() {
+    return endDateTime;
+  }
+
+  public boolean setEndDateTime(final DateTime endDateTime) {
+    if (this.endDateTime == null) {
+      this.endDateTime = endDateTime;
+      return true;
+    }
+    return false;
+  }
+
+  public boolean start() {
+    return setStartDateTime(DateTime.now());
+  }
+
+  public boolean finish() {
+    return setEndDateTime(DateTime.now());
+  }
+
+  public boolean isActive() {
+    final DateTime now = DateTime.now();
+    return now.isAfter(startDateTime) && now.isBefore(endDateTime);
   }
 
   @Override
