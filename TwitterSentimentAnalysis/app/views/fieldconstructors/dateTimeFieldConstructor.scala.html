@@ -1,0 +1,9 @@
+@(elements: helper.FieldElements)
+
+<div class="form-group @if(elements.hasErrors) {has-error}">
+  <label for="@elements.id" class="control-label">@elements.label</label>
+  <div class='input-group date'>
+    @elements.input
+    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+  </div>
+</div>
