@@ -6,7 +6,12 @@
 } else {
   <ul>
     @for(analysis <- analyses) {
-      <li>@analysis.getName()</li>
+      <li>
+        @analysis.getName()
+        @if(!analysis.getTermsAsStrings().isEmpty()) {
+          (@analysis.getTermsAsStrings().mkString(","))
+        }
+      </li>
     }
   </ul>
 }

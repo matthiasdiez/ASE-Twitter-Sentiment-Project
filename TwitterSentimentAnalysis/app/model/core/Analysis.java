@@ -1,6 +1,7 @@
 package model.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -24,7 +25,6 @@ public class Analysis extends Model implements Identifiable {
   @Id
   private Long id;
 
-  @Required
   @ManyToOne
   private final Customer owner;
 
@@ -36,6 +36,7 @@ public class Analysis extends Model implements Identifiable {
 
   public Analysis(final Customer owner, final String name) {
     this.owner = owner;
+    this.name = name;
   }
 
   @Override
@@ -59,7 +60,15 @@ public class Analysis extends Model implements Identifiable {
     return ImmutableList.copyOf(terms);
   }
 
-  public void addTerm(final String content) {
+  public List<String> getTermsAsStrings() {
+    final List<String> result = new ArrayList<String>();
+    for (final Term term : getTerms()) {
+      result.add(term.getContent());
+    }
+    return result;
+  }
+
+  public Term addTerm(final String content) {
     Term term = TermRepository.INSTANCE.one(content);
     if (term == null) {
       term = TermFactory.INSTANCE.create(content);
@@ -68,6 +77,15 @@ public class Analysis extends Model implements Identifiable {
     }
     terms.add(term);
     this.save();
+    return term;
+  }
+
+  public List<Term> addTerms(final Collection<String> contents) {
+    final List<Term> terms = new ArrayList<Term>();
+    for (final String content : contents) {
+      terms.add(addTerm(content));
+    }
+    return ImmutableList.copyOf(terms);
   }
 
   public void removeTerm(final Term term) {
