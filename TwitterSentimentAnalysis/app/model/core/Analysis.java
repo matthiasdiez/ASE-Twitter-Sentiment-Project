@@ -1,11 +1,12 @@
 package model.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import model.base.Identifiable;
 import model.factories.TermFactory;
@@ -30,11 +31,8 @@ public class Analysis extends Model implements Identifiable {
   @Required
   private String name;
 
-  @OneToMany(mappedBy = "analysis")
-  private List<Term> terms;
-
-  @OneToMany(mappedBy = "analysis")
-  private List<AnalysisExecution> executions;
+  @ManyToMany
+  private final List<Term> terms = new ArrayList<Term>();
 
   public Analysis(final Customer owner, final String name) {
     this.owner = owner;
@@ -61,31 +59,26 @@ public class Analysis extends Model implements Identifiable {
     return ImmutableList.copyOf(terms);
   }
 
-  public Term addTerm(final Analysis analysis, final String content) {
-    final Term term = TermFactory.INSTANCE.create(analysis, content);
-    TermRepository.INSTANCE.store(term);
-    return TermRepository.INSTANCE.one(term.getId());
-  }
-
-  public boolean deleteTerm(final Term term) {
-    if (term.getAnalysis().equals(this)) {
-      TermRepository.INSTANCE.delete(id);
-      return true;
+  public void addTerm(final String content) {
+    Term term = TermRepository.INSTANCE.one(content);
+    if (term == null) {
+      term = TermFactory.INSTANCE.create(content);
+      TermRepository.INSTANCE.store(term);
+      term.refresh();
     }
-    return false;
+    terms.add(term);
+    this.save();
   }
 
-  public List<AnalysisExecution> getAnalysisExecutions() {
-    return ImmutableList.copyOf(executions);
+  public void removeTerm(final Term term) {
+    terms.remove(term);
+    this.save();
   }
 
   @Override
   public void save() {
     for (final Term term : terms) {
       term.save();
-    }
-    for (final AnalysisExecution analysis : executions) {
-      analysis.save();
     }
     super.save();
   }
@@ -94,9 +87,6 @@ public class Analysis extends Model implements Identifiable {
   public void delete() {
     for (final Term term : terms) {
       term.delete();
-    }
-    for (final AnalysisExecution analysis : executions) {
-      analysis.delete();
     }
     super.delete();
   }

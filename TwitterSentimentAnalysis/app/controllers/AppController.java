@@ -1,7 +1,6 @@
 package controllers;
 
 import model.core.Analysis;
-import model.core.AnalysisExecution;
 import model.core.Customer;
 import model.repositories.CustomerRepository;
 import play.data.Form;
@@ -28,19 +27,6 @@ public class AppController extends Controller {
   }
 
   public Result addAnalysis() {
-    return TODO;
-  }
-
-  public Result listAnalysisExecutions(final Long analysisId) {
-    return TODO;
-  }
-
-  public Result createAnalysisExecution(final Long analysisId) {
-    final Form<AnalysisExecution> form = new Form<AnalysisExecution>(AnalysisExecution.class);
-    return ok(views.html.createAnalysisExecution.render(form));
-  }
-
-  public Result addAnalysisExecution() {
     return TODO;
   }
 

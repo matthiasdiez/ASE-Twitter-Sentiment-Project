@@ -1,4 +1,4 @@
-@(form: play.data.Form[model.core.AnalysisExecution])
+@(form: play.data.Form[model.core.Analysis])
 
 @import views.html.helper.FieldConstructor
 @import views.html.fieldconstructors.inputFieldConstructor
@@ -19,7 +19,7 @@
 
 @views.html.base.baseApp("Create a new analysis execution", stylesheets, scripts) {
    
-  @helper.form(routes.AppController.addAnalysisExecution, 'id -> "form-create-analysis-execution") {
+  @helper.form(routes.AppController.addAnalysis, 'id -> "form-create-analysis-execution") {
       
     @if(form.hasGlobalErrors) {
       <p class="alert alert-danger">@form.globalError.message</p>
