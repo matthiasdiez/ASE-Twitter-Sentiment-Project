@@ -1,7 +1,9 @@
 package model.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,84 +13,89 @@ import javax.persistence.ManyToOne;
 import model.base.Identifiable;
 import model.factories.TermFactory;
 import model.repositories.TermRepository;
+
+import org.joda.time.DateTime;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import twitter4j.Status;
 
 import com.google.common.collect.ImmutableList;
 
 @Entity
 public class Analysis extends Model implements Identifiable {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @Id
-  private Long id;
+	@Id
+	private Long id;
 
-  @Required
-  @ManyToOne
-  private final Customer owner;
+	@Required
+	@ManyToOne
+	private final Customer owner;
 
-  @Required
-  private String name;
+	@Required
+	private String name;
 
-  @ManyToMany
-  private final List<Term> terms = new ArrayList<Term>();
+	@ManyToMany
+	private final List<Term> terms = new ArrayList<Term>();
 
-  public Analysis(final Customer owner, final String name) {
-    this.owner = owner;
-  }
 
-  @Override
-  public Long getId() {
-    return id;
-  }
+	public Analysis(final Customer owner, final String name) {
+		this.owner = owner;
+	}
 
-  public Customer getOwner() {
-    return owner;
-  }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public Customer getOwner() {
+		return owner;
+	}
 
-  public void setName(final String name) {
-    this.name = name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public List<Term> getTerms() {
-    return ImmutableList.copyOf(terms);
-  }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-  public void addTerm(final String content) {
-    Term term = TermRepository.INSTANCE.one(content);
-    if (term == null) {
-      term = TermFactory.INSTANCE.create(content);
-      TermRepository.INSTANCE.store(term);
-      term.refresh();
-    }
-    terms.add(term);
-    this.save();
-  }
+	public List<Term> getTerms() {
+		return ImmutableList.copyOf(terms);
+	}
 
-  public void removeTerm(final Term term) {
-    terms.remove(term);
-    this.save();
-  }
+	public void addTerm(final String content) {
+		Term term = TermRepository.INSTANCE.one(content);
+		if (term == null) {
+			term = TermFactory.INSTANCE.create(content);
+			TermRepository.INSTANCE.store(term);
+			term.refresh();
+		}
+		terms.add(term);
+		this.save();
+	}
 
-  @Override
-  public void save() {
-    for (final Term term : terms) {
-      term.save();
-    }
-    super.save();
-  }
+	public void removeTerm(final Term term) {
+		terms.remove(term);
+		this.save();
+	}
 
-  @Override
-  public void delete() {
-    for (final Term term : terms) {
-      term.delete();
-    }
-    super.delete();
-  }
+	@Override
+	public void save() {
+		for (final Term term : terms) {
+			term.save();
+		}
+		super.save();
+	}
+
+	@Override
+	public void delete() {
+		for (final Term term : terms) {
+			term.delete();
+		}
+		super.delete();
+	}
 
 }
