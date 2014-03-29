@@ -11,13 +11,10 @@
 }
 
 @scripts = {
-  <script src="@routes.Assets.at("javascripts/moment.min.js")" type="text/javascript"></script>
   <script src="@routes.Assets.at("javascripts/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
-  <script>
-	  $(function () {
-	      $('.date').datetimepicker();
-	  });
-  </script>
+  <script type="text/javascript">
+    $(".datetime-picker").datetimepicker({format: 'mm/dd/yyyy hh:ii'});
+  </script> 
 }
 
 @views.html.base.baseApp("Create a new analysis", stylesheets, scripts) {
@@ -30,12 +27,8 @@
       
       @helper.inputText(form("name"), 'class -> "form-control", 'placeholder -> "Name",'_label -> "Name")
 			
-			@* 
-			http://eonasdan.github.io/bootstrap-datetimepicker
-			http://stackoverflow.com/questions/15930343/multiple-fieldconstructor-in-playframework-2-1/15937763 
-			*@
-			@helper.inputText(form("startDateTime"), 'class -> "form-control", '_label -> "Start Date/Time")(FieldConstructor(dateTimeFieldConstructor.f), null)
-			@helper.inputText(form("endDateTime"), 'class -> "form-control", '_label -> "End Date/Time")(FieldConstructor(dateTimeFieldConstructor.f), null)
+			@helper.inputText(form("startDateTime"), 'class -> "form-control", '_label -> "Start Date/Time", 'readonly -> "True")(FieldConstructor(dateTimeFieldConstructor.f), null)
+			@helper.inputText(form("endDateTime"), 'class -> "form-control", '_label -> "End Date/Time", 'readonly -> "True")(FieldConstructor(dateTimeFieldConstructor.f), null)
       
       <p><button type="submit" class="btn btn-lg btn-primary btn-block">@Messages("buttons.create")</button></p>
     }

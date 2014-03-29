@@ -6,7 +6,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
 
-  private static final String DEFAULT_DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+  private static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
 
   public static DateTime min(final DateTime a, final DateTime b) {
     return a.isBefore(b) ? a : b;
