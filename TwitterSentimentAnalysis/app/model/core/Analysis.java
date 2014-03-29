@@ -38,6 +38,7 @@ public class Analysis extends Model implements Identifiable {
   @ManyToMany
   private final List<Term> terms = new ArrayList<Term>();
 
+  @play.data.format.Formats.DateTime(pattern = "MM/dd/yyyy hh:ii")
   private DateTime startDateTime;
   private DateTime endDateTime;
 
@@ -135,22 +136,6 @@ public class Analysis extends Model implements Identifiable {
   public boolean isActive() {
     final DateTime now = DateTime.now();
     return now.isAfter(startDateTime) && now.isBefore(endDateTime);
-  }
-
-  @Override
-  public void save() {
-    for (final Term term : terms) {
-      term.save();
-    }
-    super.save();
-  }
-
-  @Override
-  public void delete() {
-    for (final Term term : terms) {
-      term.delete();
-    }
-    super.delete();
   }
 
 }

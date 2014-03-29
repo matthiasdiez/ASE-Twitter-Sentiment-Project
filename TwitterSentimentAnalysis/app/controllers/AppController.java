@@ -4,10 +4,14 @@ import static play.data.Form.form;
 import model.core.Analysis;
 import model.core.Customer;
 import model.repositories.CustomerRepository;
+
+import org.joda.time.DateTime;
+
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security.Authenticated;
+import util.DateTimeUtil;
 import util.ListUtil;
 import application.Constants;
 import controllers.authentication.CustomerAuthenticator;
@@ -36,9 +40,15 @@ public class AppController extends Controller {
     else {
       final Analysis analysis = getAuthenticatedCustomer().addAnalysis(form.data().get("name"));
       analysis.addTerms(ListUtil.listFromCommaSeparatedText(form.data().get("terms")));
-      // TODO add start and end time
-      // final DateTime startDateTime =
-      // DateTimeUtil.fromString((form.data().get("startDateTime")));
+      final DateTime startDateTime = DateTimeUtil.fromString(form.data().get("startDateTimeString"));
+      final DateTime endDateTime = DateTimeUtil.fromString(form.data().get("endDateTimeString"));
+      if (startDateTime != null) {
+        analysis.setStartDateTime(startDateTime);
+      }
+      if (endDateTime != null) {
+        analysis.setEndDateTime(endDateTime);
+      }
+      analysis.save();
       return redirect(routes.AppController.dashboard());
     }
   }
