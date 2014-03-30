@@ -2,18 +2,39 @@
 
 @import views.html.helper.FieldConstructor
 @import views.html.fieldconstructors.inputFieldConstructor
+@import views.html.fieldconstructors.dateTimeFieldConstructor
 
-@implicitFieldConstructor = @{ FieldConstructor(inputFieldConstructor.f) }
+@implicitField = @{ FieldConstructor(inputFieldConstructor.f) }
 
-@views.html.base.baseApp("Create a new analysis") {
+@stylesheets = {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-datetimepicker.min.css")">
+}
 
-    @helper.form(routes.AppController.createAnalysis, 'id -> "form-create-analysis") {
+@scripts = {
+  <script src="@routes.Assets.at("javascripts/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(".datetime-picker").datetimepicker({format: 'mm/dd/yyyy hh:ii'});
+  </script> 
+}
+
+@views.html.base.baseApp("Create a new analysis", stylesheets, scripts) {
+
+    @helper.form(routes.AppController.addAnalysis, 'id -> "form-create-analysis") {
       
       @if(form.hasGlobalErrors) {
         <p class="alert alert-danger">@form.globalError.message</p>
       }
       
       @helper.inputText(form("name"), 'class -> "form-control", 'placeholder -> "Name",'_label -> "Name")
+      
+      <div class="form-group">
+        <label for="terms" class="control-label">Terms</label>
+        <input type="text" id="terms" name="terms" class="form-control" />
+        <p class="help-block">specify a list of terms for this analysis separated with commas</p>
+      </div>
+			
+			@helper.inputText(form("startDateTimeString"), 'class -> "form-control", '_label -> "Start Date/Time", 'readonly -> "True")(FieldConstructor(dateTimeFieldConstructor.f), null)
+			@helper.inputText(form("endDateTimeString"), 'class -> "form-control", '_label -> "End Date/Time", 'readonly -> "True")(FieldConstructor(dateTimeFieldConstructor.f), null)
       
       <p><button type="submit" class="btn btn-lg btn-primary btn-block">@Messages("buttons.create")</button></p>
     }
