@@ -1,9 +1,7 @@
 package model.core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,84 +16,131 @@ import org.joda.time.DateTime;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import twitter4j.Status;
+import util.DateTimeUtil;
 
 import com.google.common.collect.ImmutableList;
 
 @Entity
 public class Analysis extends Model implements Identifiable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	private Long id;
+  @Id
+  private Long id;
 
-	@Required
-	@ManyToOne
-	private final Customer owner;
+  @Required
+  @ManyToOne
+  private final Customer owner;
 
-	@Required
-	private String name;
+  @Required
+  private String name;
 
-	@ManyToMany
-	private final List<Term> terms = new ArrayList<Term>();
+  private DateTime startDateTime;
+  private DateTime endDateTime;
 
+  @ManyToMany
+  private final List<Term> terms = new ArrayList<Term>();
 
-	public Analysis(final Customer owner, final String name) {
-		this.owner = owner;
-	}
+  public Analysis(final Customer owner, final String name) {
+    this.owner = owner;
+  }
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+  @Override
+  public Long getId() {
+    return id;
+  }
 
-	public Customer getOwner() {
-		return owner;
-	}
+  public Customer getOwner() {
+    return owner;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(final String name) {
-		this.name = name;
-	}
+  public void setName(final String name) {
+    this.name = name;
+  }
 
-	public List<Term> getTerms() {
-		return ImmutableList.copyOf(terms);
-	}
+  public List<Term> getTerms() {
+    return ImmutableList.copyOf(terms);
+  }
 
-	public void addTerm(final String content) {
-		Term term = TermRepository.INSTANCE.one(content);
-		if (term == null) {
-			term = TermFactory.INSTANCE.create(content);
-			TermRepository.INSTANCE.store(term);
-			term.refresh();
-		}
-		terms.add(term);
-		this.save();
-	}
+  public List<String> getTermsAsStrings() {
+    final List<String> result = new ArrayList<String>();
+    for (final Term term : getTerms()) {
+      result.add(term.getContent());
+    }
+    return result;
+  }
 
-	public void removeTerm(final Term term) {
-		terms.remove(term);
-		this.save();
-	}
+  public void addTerm(final String content) {
+    Term term = TermRepository.INSTANCE.one(content);
+    if (term == null) {
+      term = TermFactory.INSTANCE.create(content);
+      TermRepository.INSTANCE.store(term);
+      term.refresh();
+    }
+    terms.add(term);
+    this.save();
+  }
 
-	@Override
-	public void save() {
-		for (final Term term : terms) {
-			term.save();
-		}
-		super.save();
-	}
+  public void removeTerm(final Term term) {
+    terms.remove(term);
+    this.save();
+  }
 
-	@Override
-	public void delete() {
-		for (final Term term : terms) {
-			term.delete();
-		}
-		super.delete();
-	}
+  public DateTime getStartDateTime() {
+    return startDateTime;
+  }
+
+  public boolean setStartDateTime(final DateTime startDateTime) {
+    if (this.startDateTime == null) {
+      this.startDateTime = DateTimeUtil.nowOrLater(startDateTime);
+      return true;
+    }
+    return false;
+  }
+
+  public DateTime getEndDateTime() {
+    return endDateTime;
+  }
+
+  public boolean setEndDateTime(final DateTime endDateTime) {
+    if (this.endDateTime == null) {
+      this.endDateTime = endDateTime;
+      return true;
+    }
+    return false;
+  }
+
+  public boolean start() {
+    return setStartDateTime(DateTime.now());
+  }
+
+  public boolean finish() {
+    return setEndDateTime(DateTime.now());
+  }
+
+  public boolean isActive() {
+    final DateTime now = DateTime.now();
+    return now.isAfter(startDateTime) && now.isBefore(endDateTime);
+  }
+
+  @Override
+  public void save() {
+    for (final Term term : terms) {
+      term.save();
+    }
+    super.save();
+  }
+
+  @Override
+  public void delete() {
+    for (final Term term : terms) {
+      term.delete();
+    }
+    super.delete();
+  }
 
 }
