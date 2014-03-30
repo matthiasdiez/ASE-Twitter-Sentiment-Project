@@ -1,12 +1,25 @@
 @(analyses: List[model.core.Analysis])
 
+@import util.DateTimeUtil
+
 <h2>My Analyses</h2>
 @if(analyses.isEmpty()) {
   You did not yet specify an analysis.
 } else {
   <ul>
     @for(analysis <- analyses) {
-      <li>@analysis.getName()</li>
+      <li>
+        @analysis.getName()
+        @if(!analysis.getTermsAsStrings().isEmpty()) {
+          (@analysis.getTermsAsStrings().mkString(","))
+        }
+        @if(analysis.getStartDateTime() != null) {
+          @DateTimeUtil.toString(analysis.getStartDateTime())
+        }
+        @if(analysis.getEndDateTime() != null) {
+          @DateTimeUtil.toString(analysis.getEndDateTime())
+        }
+      </li>
     }
   </ul>
 }

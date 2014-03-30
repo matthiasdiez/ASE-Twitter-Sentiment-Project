@@ -7,7 +7,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class DateTimeUtil {
 
   // http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html
-  private static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy HH:mm";
+  private static final String DEFAULT_DATE_FORMAT_DB = "MM/dd/yyyy HH:mm";
 
   public static DateTime min(final DateTime a, final DateTime b) {
     return a.isBefore(b) ? a : b;
@@ -22,7 +22,7 @@ public class DateTimeUtil {
   }
 
   public static DateTime fromString(final String date) {
-    return fromString(date, DEFAULT_DATE_FORMAT);
+    return fromString(date, DEFAULT_DATE_FORMAT_DB);
   }
 
   public static DateTime fromString(final String date, final String format) {
@@ -33,4 +33,7 @@ public class DateTimeUtil {
     return formatter.parseDateTime(date);
   }
 
+  public static String toString(final DateTime dateTime) {
+    return DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT_DB).print(dateTime);
+  }
 }
