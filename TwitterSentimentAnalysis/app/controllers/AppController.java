@@ -58,7 +58,7 @@ public class AppController extends Controller {
         analysis.setEndDateTime(endDateTime);
       }
       analysis.save();
-      return redirect(routes.AppController.dashboard());
+      return redirect(routes.AppController.listAnalyses());
     }
   }
 

@@ -14,6 +14,7 @@
 		      <th>Terms</th>
 		      <th>Start</th>
 		      <th>End</th>
+		      <th></th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -35,11 +36,15 @@
 		            @DateTimeUtil.toString(analysis.getEndDateTime())
 		          }
 			      </td>
+			      <td>
+			        <a class="btn btn-lg btn-success" href="@routes.AppController.createAnalysis()" role="button">Start</a>
+			        <a class="btn btn-lg btn-warning" href="@routes.AppController.createAnalysis()" role="button">Stop</a>
+			      </td>
 			    </tr>
 		    }
 		  </tbody>
 	  </table>
-	  <a class="btn btn-lg btn-success" href="@routes.AppController.createAnalysis()" role="button">Create Analysis</a>
+	  <a class="btn btn-lg btn-primary" href="@routes.AppController.createAnalysis()" role="button">Create Analysis</a>
 	}
 
 }

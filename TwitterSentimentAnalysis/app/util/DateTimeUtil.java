@@ -9,6 +9,8 @@ public class DateTimeUtil {
   // http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html
   private static final String DEFAULT_DATE_FORMAT_DB = "MM/dd/yyyy HH:mm";
 
+  private static final String EMPTY = "";
+
   public static DateTime min(final DateTime a, final DateTime b) {
     return a.isBefore(b) ? a : b;
   }
@@ -30,6 +32,9 @@ public class DateTimeUtil {
   }
 
   public static DateTime fromString(final String date, final DateTimeFormatter formatter) {
+    if (date.equals(EMPTY)) {
+      return null;
+    }
     return formatter.parseDateTime(date);
   }
 
