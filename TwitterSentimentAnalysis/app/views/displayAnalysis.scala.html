@@ -3,12 +3,22 @@
 @import util.DateTimeUtil
 
 @views.html.base.baseApp(analysis.getName()) {
-	@for(term <- analysis.getTerms()) {
-		<h2>@term.getContent()</h2>
-	  	<ul>
-		@for(result <- term.getResults()) {
-			<li>@result.getValue()</li>
-	  	}
-	  	</ul>
-	}  
+  
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+  
+	    <h3>Terms</h3>
+	    
+	    <ul class="large fa-ul">
+        @for(term <- analysis.getTerms()) {
+          <li><i class="fa-li fa fa-caret-right"></i>@term.getContent()</li>
+        }
+      </ul>
+	    
+	  </div>
+	  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+	    <img src="@routes.Assets.at("images/plot-placeholder.png")" class="img-responsive" />
+	  </div>
+  
+  </div> 
 }

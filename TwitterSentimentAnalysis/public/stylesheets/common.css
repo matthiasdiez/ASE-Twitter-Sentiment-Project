@@ -43,3 +43,11 @@
 .clear {
 	clear: both;
 }
+
+/*********
+ * lists *
+ *********/
+ 
+ ul.large li {
+   font-size: 18px;
+ }
