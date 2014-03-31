@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.ase.team2;
+package service.sentiment;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +15,7 @@ public class SentimentClassifier {
 	public SentimentClassifier(String trainFile) {
 
 		try {
-			classifier = (LMClassifier) AbstractExternalizable
-					.readObject(new File(trainFile));
+			classifier = (LMClassifier) AbstractExternalizable.readObject(new File(trainFile));
 			categories = classifier.categories();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -31,11 +30,10 @@ public class SentimentClassifier {
 		return classification.bestCategory();
 	}
 	
-	public float getSentimentScore(ArrayList<String> tweetList) {
-		float score = 0; 
+	public double getSentimentScore(ArrayList<String> tweetList) {
+		double score = 0; 
 		for(String tweet : tweetList){
 			String sentiment = classify(tweet);
-			System.out.println(tweet + ": " + sentiment);
 			if(sentiment.equals("pos")){
 				score += 1;
 			}else if(sentiment.equals("neg")){
@@ -43,7 +41,6 @@ public class SentimentClassifier {
 			}else{ // sentiment.equals("neu")){
 				score += 0.5;
 			}
-			System.out.println("Current total score: " + score);
 		}
 		
 		score = score / tweetList.size();
