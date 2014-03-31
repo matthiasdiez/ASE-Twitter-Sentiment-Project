@@ -3,7 +3,12 @@
 @import util.DateTimeUtil
 
 @views.html.base.baseApp(analysis.getName()) {
-  
-  @analysis.getName()
-  
+	@for(term <- analysis.getTerms()) {
+		<h2>@term.getContent()</h2>
+	  	<ul>
+		@for(result <- term.getResults()) {
+			<li>@result.getValue()</li>
+	  	}
+	  	</ul>
+	}  
 }

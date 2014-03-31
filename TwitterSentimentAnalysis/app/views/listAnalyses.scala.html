@@ -23,7 +23,7 @@
 			      <td><a href="@routes.AppController.displayAnalysis(analysis.getId())">@analysis.getName()</a></td>
 			      <td>
 			        @if(!analysis.getTermsAsStrings().isEmpty()) {
-		            @analysis.getTermsAsStrings().mkString(",")
+		            @analysis.getTermsAsStrings().mkString(", ")
 		          }
 	          </td>
 			      <td>

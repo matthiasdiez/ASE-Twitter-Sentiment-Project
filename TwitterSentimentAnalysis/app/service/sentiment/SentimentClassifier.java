@@ -12,10 +12,10 @@ public class SentimentClassifier {
 	String[] categories;
 	LMClassifier classifier;
 
-	public SentimentClassifier(String trainFile) {
+	public SentimentClassifier() {
 
 		try {
-			classifier = (LMClassifier) AbstractExternalizable.readObject(new File(trainFile));
+			classifier = (LMClassifier) AbstractExternalizable.readObject(new File("files/classifier.txt"));
 			categories = classifier.categories();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
