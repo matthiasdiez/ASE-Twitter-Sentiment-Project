@@ -26,8 +26,8 @@ public class AppController extends Controller {
 
   private static final String ERROR = "error";
 
-  public Result dashboard() {
-    return ok(views.html.dashboard.render(getAuthenticatedCustomer().getAnalysis()));
+  public Result main() {
+    return redirect(routes.AppController.listAnalyses());
   }
 
   public Result listAnalyses() {
@@ -42,8 +42,8 @@ public class AppController extends Controller {
     return ok(views.html.displayAnalysis.render(analysis));
   }
 
-  public Result getAnalysisData(final Long analysisId) {
-    final Analysis analysis = AnalysisRepository.INSTANCE.one(analysisId);
+  public Result getAnalysisData(final Long id) {
+    final Analysis analysis = AnalysisRepository.INSTANCE.one(id);
     if (analysis == null) {
       return notFound();
     }
@@ -89,6 +89,20 @@ public class AppController extends Controller {
       analysis.save();
       return redirect(routes.AppController.listAnalyses());
     }
+  }
+
+  public Result startAnalysis(final Long id) {
+    final Analysis analysis = AnalysisRepository.INSTANCE.one(id);
+    analysis.start();
+    analysis.save();
+    return redirect(routes.AppController.listAnalyses());
+  }
+
+  public Result finishAnalysis(final Long id) {
+    final Analysis analysis = AnalysisRepository.INSTANCE.one(id);
+    analysis.finish();
+    analysis.save();
+    return redirect(routes.AppController.listAnalyses());
   }
 
   private Customer getAuthenticatedCustomer() {

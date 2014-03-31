@@ -1,9 +1,0 @@
-@(analyses: List[model.core.Analysis])
-
-@import views.html.content.listAnalyses
-
-@views.html.base.baseApp(Messages("pages.dashboard.title")) {
-
-    @listAnalyses(analyses)
-
-}
