@@ -53,9 +53,8 @@ public class Term extends Model implements Identifiable {
   }
 
   public Result addResult(final Double value, final DateTime dateTime) {
-    final Result result = ResultFactory.INSTANCE.create(value, dateTime);
+    final Result result = ResultFactory.INSTANCE.create(this, value, dateTime);
     ResultRepository.INSTANCE.store(result);
-    results.add(result);
     this.save();
     return result;
   }

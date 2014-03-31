@@ -37,8 +37,12 @@
 		          }
 			      </td>
 			      <td>
-			        <a class="btn btn-lg btn-success" href="@routes.AppController.createAnalysis()" role="button">Start</a>
-			        <a class="btn btn-lg btn-warning" href="@routes.AppController.createAnalysis()" role="button">Stop</a>
+			        @if(analysis.getStartDateTime() != null) {
+			          <a class="btn btn-sm btn-success" href="@routes.AppController.createAnalysis()" role="button">Start</a> 
+			        }
+			        @if(analysis.getEndDateTime() != null) {
+			          <a class="btn btn-sm btn-warning" href="@routes.AppController.createAnalysis()" role="button">Stop</a>
+              }
 			      </td>
 			    </tr>
 		    }

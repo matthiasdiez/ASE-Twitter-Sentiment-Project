@@ -26,12 +26,13 @@ public class Result extends Model implements Identifiable {
 
   @Required
   @ManyToOne
-  private Term term;
+  private final Term term;
 
   @Required
   private final DateTime dateTime;
 
-  public Result(final double value, final DateTime dateTime) {
+  public Result(final Term term, final double value, final DateTime dateTime) {
+    this.term = term;
     this.value = roundValue(value);
     this.dateTime = dateTime;
   }

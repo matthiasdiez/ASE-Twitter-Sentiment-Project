@@ -15,10 +15,16 @@ import play.mvc.Security.Authenticated;
 import util.DateTimeUtil;
 import util.ListUtil;
 import application.Constants;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import controllers.authentication.CustomerAuthenticator;
 
 @Authenticated(CustomerAuthenticator.class)
 public class AppController extends Controller {
+
+  private static final String ERROR = "error";
 
   public Result dashboard() {
     return ok(views.html.dashboard.render(getAuthenticatedCustomer().getAnalysis()));
@@ -34,6 +40,29 @@ public class AppController extends Controller {
       return notFound();
     }
     return ok(views.html.displayAnalysis.render(analysis));
+  }
+
+  public Result getAnalysisData(final Long analysisId) {
+    final Analysis analysis = AnalysisRepository.INSTANCE.one(analysisId);
+    if (analysis == null) {
+      return notFound();
+    }
+    final String result = createJson(analysis);
+    if (result.equals(ERROR)) {
+      return notFound();
+    }
+    return ok(result);
+  }
+
+  private String createJson(final Analysis analysis) {
+    final ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(analysis);
+    }
+    catch (final JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return ERROR;
   }
 
   public Result createAnalysis() {
