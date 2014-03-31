@@ -10,7 +10,6 @@ import model.dto.TermJsonDTO;
 import model.repositories.AnalysisRepository;
 import model.repositories.CustomerRepository;
 
-import org.apache.http.params.CoreConnectionPNames;
 import org.joda.time.DateTime;
 
 import play.data.Form;
@@ -29,15 +28,15 @@ import controllers.authentication.CustomerAuthenticator;
 @Authenticated(CustomerAuthenticator.class)
 public class AppController extends Controller {
 
-	private static final String ERROR = "error";
+  private static final String ERROR = "error";
 
   public Result main() {
     return redirect(routes.AppController.listAnalyses());
   }
 
-	public Result listAnalyses() {
-		return ok(views.html.listAnalyses.render(getAuthenticatedCustomer().getAnalysis()));
-	}
+  public Result listAnalyses() {
+    return ok(views.html.listAnalyses.render(getAuthenticatedCustomer().getAnalysis()));
+  }
 
   public Result displayAnalysis(final Long id) {
     final Analysis analysis = AnalysisRepository.INSTANCE.one(id);
@@ -47,37 +46,38 @@ public class AppController extends Controller {
     return ok(views.html.displayAnalysis.render(analysis));
   }
 
-	public Result getAnalysisData(final Long analysisId) {
-		final Analysis analysis = AnalysisRepository.INSTANCE.one(analysisId);
-		if (analysis == null) {
-			return notFound();
-		}
-		final String result = createJson(analysis);
-		if (result.equals(ERROR)) {
-			return notFound();
-		}
-		return ok(result);
-	}
+  public Result getAnalysisData(final Long analysisId) {
+    final Analysis analysis = AnalysisRepository.INSTANCE.one(analysisId);
+    if (analysis == null) {
+      return notFound();
+    }
+    final String result = createJson(analysis);
+    if (result.equals(ERROR)) {
+      return notFound();
+    }
+    return ok(result);
+  }
 
-	private String createJson(final Analysis analysis) {
-		AnalysisJsonDTO analysisJsonDTO = new AnalysisJsonDTO(analysis.getName());
-		for (Term term : analysis.getTerms()) {
-			TermJsonDTO termJsonDTO = new TermJsonDTO(term.getContent());
-			for (model.core.Result result : term.getResults()) {
-				ResultJsonDTO resultJsonDTO = new ResultJsonDTO(DateTimeUtil.toString(result.getDateTime()));
-				resultJsonDTO.value = result.getValue();
-				termJsonDTO.addResult(resultJsonDTO);
-			}
-			analysisJsonDTO.addTerm(termJsonDTO);
-		}
-		final ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			return objectMapper.writeValueAsString(analysisJsonDTO);
-		} catch (final JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return ERROR;
-	}
+  private String createJson(final Analysis analysis) {
+    final AnalysisJsonDTO analysisJsonDTO = new AnalysisJsonDTO(analysis.getName());
+    for (final Term term : analysis.getTerms()) {
+      final TermJsonDTO termJsonDTO = new TermJsonDTO(term.getContent());
+      for (final model.core.Result result : term.getResults()) {
+        final ResultJsonDTO resultJsonDTO = new ResultJsonDTO(DateTimeUtil.toString(result.getDateTime()));
+        resultJsonDTO.value = result.getValue();
+        termJsonDTO.addResult(resultJsonDTO);
+      }
+      analysisJsonDTO.addTerm(termJsonDTO);
+    }
+    final ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(analysisJsonDTO);
+    }
+    catch (final JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return ERROR;
+  }
 
   public Result createAnalysis() {
     final Form<Analysis> form = new Form<Analysis>(Analysis.class);
