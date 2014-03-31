@@ -1,17 +1,23 @@
 package model.core;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import model.base.Identifiable;
 import model.factories.TermFactory;
 import model.repositories.TermRepository;
+
+import org.joda.time.DateTime;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import util.DateTimeUtil;
 
 import com.google.common.collect.ImmutableList;
 
@@ -23,21 +29,21 @@ public class Analysis extends Model implements Identifiable {
   @Id
   private Long id;
 
-  @Required
   @ManyToOne
   private final Customer owner;
 
   @Required
   private String name;
 
-  @OneToMany(mappedBy = "analysis")
-  private List<Term> terms;
+  private DateTime startDateTime;
+  private DateTime endDateTime;
 
-  @OneToMany(mappedBy = "analysis")
-  private List<AnalysisExecution> executions;
+  @ManyToMany
+  private final List<Term> terms = new ArrayList<Term>();
 
   public Analysis(final Customer owner, final String name) {
     this.owner = owner;
+    this.name = name;
   }
 
   @Override
@@ -61,31 +67,80 @@ public class Analysis extends Model implements Identifiable {
     return ImmutableList.copyOf(terms);
   }
 
-  public Term addTerm(final Analysis analysis, final String content) {
-    final Term term = TermFactory.INSTANCE.create(analysis, content);
-    TermRepository.INSTANCE.store(term);
-    return TermRepository.INSTANCE.one(term.getId());
+  public List<String> getTermsAsStrings() {
+    final List<String> result = new ArrayList<String>();
+    for (final Term term : getTerms()) {
+      result.add(term.getContent());
+    }
+    return result;
   }
 
-  public boolean deleteTerm(final Term term) {
-    if (term.getAnalysis().equals(this)) {
-      TermRepository.INSTANCE.delete(id);
+  public Term addTerm(final String content) {
+    Term term = TermRepository.INSTANCE.one(content);
+    if (term == null) {
+      term = TermFactory.INSTANCE.create(content);
+      TermRepository.INSTANCE.store(term);
+      term.refresh();
+    }
+    terms.add(term);
+    this.save();
+    return term;
+  }
+
+  public List<Term> addTerms(final Collection<String> contents) {
+    final List<Term> newTerms = new ArrayList<Term>();
+    for (final String content : contents) {
+      newTerms.add(addTerm(content));
+    }
+    return ImmutableList.copyOf(newTerms);
+  }
+
+  public void removeTerm(final Term term) {
+    terms.remove(term);
+    this.save();
+  }
+
+  public DateTime getStartDateTime() {
+    return startDateTime;
+  }
+
+  public boolean setStartDateTime(final DateTime startDateTime) {
+    if (this.startDateTime == null) {
+      this.startDateTime = DateTimeUtil.nowOrLater(startDateTime);
       return true;
     }
     return false;
   }
 
-  public List<AnalysisExecution> getAnalysisExecutions() {
-    return ImmutableList.copyOf(executions);
+  public DateTime getEndDateTime() {
+    return endDateTime;
+  }
+
+  public boolean setEndDateTime(final DateTime endDateTime) {
+    if (this.endDateTime == null) {
+      this.endDateTime = endDateTime;
+      return true;
+    }
+    return false;
+  }
+
+  public boolean start() {
+    return setStartDateTime(DateTime.now());
+  }
+
+  public boolean finish() {
+    return setEndDateTime(DateTime.now());
+  }
+
+  public boolean isActive() {
+    final DateTime now = DateTime.now();
+    return now.isAfter(startDateTime) && now.isBefore(endDateTime);
   }
 
   @Override
   public void save() {
     for (final Term term : terms) {
       term.save();
-    }
-    for (final AnalysisExecution analysis : executions) {
-      analysis.save();
     }
     super.save();
   }
@@ -94,9 +149,6 @@ public class Analysis extends Model implements Identifiable {
   public void delete() {
     for (final Term term : terms) {
       term.delete();
-    }
-    for (final AnalysisExecution analysis : executions) {
-      analysis.delete();
     }
     super.delete();
   }

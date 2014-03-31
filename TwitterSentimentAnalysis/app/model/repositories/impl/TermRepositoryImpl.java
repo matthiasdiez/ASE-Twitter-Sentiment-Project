@@ -13,4 +13,9 @@ public class TermRepositoryImpl extends AbstractBaseRepositoryImpl<Term> impleme
     return finder;
   }
 
+  @Override
+  public Term one(final String content) {
+    return finder.where().eq("content", content).findUnique();
+  }
+
 }

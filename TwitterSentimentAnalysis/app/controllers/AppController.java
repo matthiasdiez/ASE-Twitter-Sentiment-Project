@@ -1,18 +1,26 @@
 package controllers;
 
+import static play.data.Form.form;
 import model.core.Analysis;
-import model.core.AnalysisExecution;
+import model.core.Customer;
+import model.repositories.CustomerRepository;
+
+import org.joda.time.DateTime;
+
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security.Authenticated;
+import util.DateTimeUtil;
+import util.ListUtil;
+import application.Constants;
 import controllers.authentication.CustomerAuthenticator;
 
 @Authenticated(CustomerAuthenticator.class)
 public class AppController extends Controller {
 
   public Result dashboard() {
-    return ok(views.html.dashboard.render());
+    return ok(views.html.dashboard.render(getAuthenticatedCustomer().getAnalysis()));
   }
 
   public Result listAnalyses() {
@@ -25,19 +33,27 @@ public class AppController extends Controller {
   }
 
   public Result addAnalysis() {
-    return TODO;
+    final Form<Analysis> form = form(Analysis.class).bindFromRequest();
+    if (form.hasErrors()) {
+      return badRequest(views.html.createAnalysis.render(form));
+    }
+    else {
+      final Analysis analysis = getAuthenticatedCustomer().addAnalysis(form.get().getName());
+      analysis.addTerms(ListUtil.listFromCommaSeparatedText(form.data().get("terms")));
+      final DateTime startDateTime = DateTimeUtil.fromString(form.data().get("startDateTimeString"));
+      final DateTime endDateTime = DateTimeUtil.fromString(form.data().get("endDateTimeString"));
+      if (startDateTime != null) {
+        analysis.setStartDateTime(startDateTime);
+      }
+      if (endDateTime != null) {
+        analysis.setEndDateTime(endDateTime);
+      }
+      analysis.save();
+      return redirect(routes.AppController.dashboard());
+    }
   }
 
-  public Result listAnalysisExecutions(final Long analysisId) {
-    return TODO;
-  }
-
-  public Result createAnalysisExecution(final Long analysisId) {
-    final Form<AnalysisExecution> form = new Form<AnalysisExecution>(AnalysisExecution.class);
-    return ok(views.html.createAnalysisExecution.render(form));
-  }
-
-  public Result addAnalysisExecution() {
-    return TODO;
+  private Customer getAuthenticatedCustomer() {
+    return CustomerRepository.INSTANCE.one(session(Constants.SESSION_KEY_NAME));
   }
 }
