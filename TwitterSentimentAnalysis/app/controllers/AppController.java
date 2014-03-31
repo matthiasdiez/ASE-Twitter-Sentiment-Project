@@ -3,6 +3,7 @@ package controllers;
 import static play.data.Form.form;
 import model.core.Analysis;
 import model.core.Customer;
+import model.repositories.AnalysisRepository;
 import model.repositories.CustomerRepository;
 
 import org.joda.time.DateTime;
@@ -24,7 +25,15 @@ public class AppController extends Controller {
   }
 
   public Result listAnalyses() {
-    return ok(views.html.listAnalyses.render());
+    return ok(views.html.listAnalyses.render(getAuthenticatedCustomer().getAnalysis()));
+  }
+
+  public Result displayAnalysis(final Long id) {
+    final Analysis analysis = AnalysisRepository.INSTANCE.one(id);
+    if (analysis == null) {
+      return notFound();
+    }
+    return ok(views.html.displayAnalysis.render(analysis));
   }
 
   public Result createAnalysis() {

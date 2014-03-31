@@ -1,5 +1,45 @@
-@views.html.base.baseApp("Analyses") {
+@(analyses: List[model.core.Analysis])
 
-    List goes here
+@import util.DateTimeUtil
+
+@views.html.base.baseApp("All Analyses") {
+
+  @if(analyses.isEmpty()) {
+  You did not yet specify an analysis.
+	} else {
+	  <table class="table table-striped table-hover">
+		  <thead>
+		    <tr>
+		      <th>Name</th>
+		      <th>Terms</th>
+		      <th>Start</th>
+		      <th>End</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    @for(analysis <- analyses) {
+			    <tr>
+			      <td><a href="@routes.AppController.displayAnalysis(analysis.getId())">@analysis.getName()</a></td>
+			      <td>
+			        @if(!analysis.getTermsAsStrings().isEmpty()) {
+		            @analysis.getTermsAsStrings().mkString(",")
+		          }
+	          </td>
+			      <td>
+			        @if(analysis.getStartDateTime() != null) {
+		            @DateTimeUtil.toString(analysis.getStartDateTime())
+		          }
+	          </td>
+			      <td>
+			        @if(analysis.getEndDateTime() != null) {
+		            @DateTimeUtil.toString(analysis.getEndDateTime())
+		          }
+			      </td>
+			    </tr>
+		    }
+		  </tbody>
+	  </table>
+	  <a class="btn btn-lg btn-success" href="@routes.AppController.createAnalysis()" role="button">Create Analysis</a>
+	}
 
 }

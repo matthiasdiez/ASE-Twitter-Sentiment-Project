@@ -1,83 +1,62 @@
 package model.core;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import model.base.Identifiable;
+import model.factories.ResultFactory;
+import model.repositories.ResultRepository;
 
 import org.joda.time.DateTime;
 
-import model.base.Identifiable;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import twitter4j.Status;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 @Entity
 public class Term extends Model implements Identifiable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	private Long id;
+  @Id
+  private Long id;
 
-	@Required
-	private final String content;
+  @Required
+  private final String content;
 
-	@ManyToMany(mappedBy = "terms")
-	private List<Analysis> analyses;
+  @ManyToMany(mappedBy = "terms")
+  private List<Analysis> analyses;
 
-	@OneToMany(mappedBy = "term")
-	private List<Result> results;
+  @OneToMany(mappedBy = "term")
+  private List<Result> results;
 
-	@ManyToOne
-	private final Map<Long, Status> tweetsToAnalyze = new HashMap<Long, Status>();
+  public Term(final String content) {
+    this.content = content;
+  }
 
-	// Timestamp that allows to check when the latest Sentiment Analysis was run
-	private DateTime latestSentimentAnalysis;
+  @Override
+  public Long getId() {
+    return id;
+  }
 
-	public Term(final String content) {
-		this.content = content;
-		latestSentimentAnalysis = DateTime.now();
-	}
+  public String getContent() {
+    return content;
+  }
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+  public List<Result> getResults() {
+    return ImmutableList.copyOf(results);
+  }
 
-	public String getContent() {
-		return content;
-	}
-
-	public List<Result> getResults() {
-		return ImmutableList.copyOf(results);
-	}
-
-	public Map<Long, Status> getTweetsToAnalyze() {
-		return ImmutableMap.copyOf(tweetsToAnalyze);
-	}
-
-	public Status getTweet(long id) {
-		return tweetsToAnalyze.get(id);
-	}
-
-	public void addStatus(Status status) {
-		tweetsToAnalyze.put(status.getId(), status);
-	}
-
-	public void setLatestSentimentAnalysis(DateTime dateTime) {
-		this.latestSentimentAnalysis = dateTime;
-	}
-
-	public DateTime getLatestSentimentAnalysis() {
-		return latestSentimentAnalysis;
-	}
+  public Result addResult(final Double value, final DateTime dateTime) {
+    final Result result = ResultFactory.INSTANCE.create(value, dateTime);
+    ResultRepository.INSTANCE.store(result);
+    results.add(result);
+    this.save();
+    return result;
+  }
 }
