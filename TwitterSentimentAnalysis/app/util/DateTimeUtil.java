@@ -41,4 +41,10 @@ public class DateTimeUtil {
   public static String toString(final DateTime dateTime) {
     return DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT_DB).print(dateTime);
   }
+
+  public static DateTime cut(final DateTime input) {
+    DateTime output = input.minusMillis(input.getMillisOfSecond());
+    output = output.minusSeconds(input.getSecondOfMinute());
+    return output.minusMinutes(input.getMinuteOfHour());
+  }
 }
