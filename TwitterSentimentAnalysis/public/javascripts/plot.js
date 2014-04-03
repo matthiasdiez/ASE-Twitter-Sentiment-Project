@@ -1,59 +1,48 @@
 $(function() {
+	var plotdata = [];
+	alert("/analysis/" + window.analysis_id + "/data");
+	$.getJSON( "/analysis/" + window.analysis_id + "/data", function( json ) {			
+		for (var i = 0; i < json.terms.length; i++) {
+			var term = json.terms[i];
+			var datapoints = []
+			var datarow = {"label" : term.name, "data" : datapoints};
 
-		var labels = ["datum1", "datum2", "datum3", "datum4", "datum5", "datum6"];
-
-		var values1 = [[0, 0.3], [1, 0.5], [2,0.8], [3,0.2], [4,0.6], [5,0.4]];
-		
-		var values2 = [[0, 0.6], [1, 0.7], [2,0.2], [3,0.2], [4,0.9], [5,0.8]];
-
-		function TickGenerator(axis) {
-	        var res = [],
-				j=0,
-	            i = Math.floor(axis.min);
-	        do {
-	            res.push([i, labels[j]]);
-				j++;
-				++i;
-	        } while (i < axis.max);
-	        return res;
-    	}
+			for (var j = 0; j < term.results.length; j++) {
+				var data = term.results[j];
+				var datapoint = [data.timestamp, data.value];
+				datarow.data.push(datapoint);
+			}
+			plotdata.push(datarow);
+		}
 
 		$.plot(
 			// target
 			"#plot", 
 
 			// data
-			[{
-				data: values1,
-				label: "Val 1",
-				lines: { show: true, fill: true }
-			},
-			{
-				data: values2,
-				label: "Val 2",
-				lines: { show: true, fill: true }
-			}
-			],
+			plotdata,
 
 			// options
 			{
 				xaxis: {
-        			ticks: TickGenerator
+					mode: "categories",
+        			ticks: 0
 		  		},
 		  		yaxis: {
 					min:0,
 					max: 1
 			  	},
+				lines: { show: true, fill: true },
+				points: { show: true},
 		      	grid: { hoverable: true },
 		      	legend: { show: true },
 		      	tooltip: true,
 		      	tooltipOpts: {
-		    		content: "%x : %y"
+		    	content: "%x : %y"
 		      	}
 	  		}
 		);
 
 		// Add the Flot version string to the footer
-
-		
 	});
+});
