@@ -1,6 +1,5 @@
 $(function() {
 	var plotdata = [];
-	alert("/analysis/" + window.analysis_id + "/data");
 	$.getJSON( "/analysis/" + window.analysis_id + "/data", function( json ) {			
 		for (var i = 0; i < json.terms.length; i++) {
 			var term = json.terms[i];
