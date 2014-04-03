@@ -1,7 +1,7 @@
 package model.repositories.impl;
 
 import play.db.ebean.Model.Finder;
-import model.core.Result;
+import model.core.SentimentResult;
 import model.repositories.TweetRepository;
 import twitter4j.Status;
 

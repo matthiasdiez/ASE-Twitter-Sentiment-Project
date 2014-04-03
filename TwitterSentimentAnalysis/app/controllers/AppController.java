@@ -1,12 +1,17 @@
 package controllers;
 
 import static play.data.Form.form;
+
+import java.util.Collection;
+import java.util.Map;
+
 import model.core.Analysis;
 import model.core.Customer;
+import model.core.SentimentResult;
 import model.core.Term;
 import model.dto.AnalysisJsonDTO;
-import model.dto.ResultJsonDTO;
-import model.dto.TermJsonDTO;
+import model.dto.SentimentResultDto;
+import model.dto.TermDto;
 import model.repositories.AnalysisRepository;
 import model.repositories.CustomerRepository;
 
@@ -22,6 +27,8 @@ import application.Constants;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 
 import controllers.authentication.CustomerAuthenticator;
 
@@ -61,13 +68,25 @@ public class AppController extends Controller {
   private String createJson(final Analysis analysis) {
     final AnalysisJsonDTO analysisJsonDTO = new AnalysisJsonDTO(analysis.getName());
     for (final Term term : analysis.getTerms()) {
-      final TermJsonDTO termJsonDTO = new TermJsonDTO(term.getContent());
-      for (final model.core.Result result : term.getResults()) {
-        final ResultJsonDTO resultJsonDTO = new ResultJsonDTO(DateTimeUtil.toString(result.getDateTime()));
-        resultJsonDTO.value = result.getValue();
-        termJsonDTO.addResult(resultJsonDTO);
+      final TermDto termDto = new TermDto(term.getContent());
+
+      final ListMultimap<DateTime, SentimentResult> resultsPerInterval = ArrayListMultimap.create();
+      for (final SentimentResult result : term.getResults()) {
+        resultsPerInterval.put(DateTimeUtil.cut(result.getDateTime()), result);
       }
-      analysisJsonDTO.addTerm(termJsonDTO);
+
+      for (final Map.Entry<DateTime, Collection<SentimentResult>> entry : resultsPerInterval.asMap().entrySet()) {
+        double average = 0;
+        for (final SentimentResult r : entry.getValue()) {
+          average += r.getValue();
+        }
+        average = average / entry.getValue().size();
+
+        final SentimentResultDto resultDto = new SentimentResultDto(DateTimeUtil.toString(entry.getKey()), average);
+        termDto.addResult(resultDto);
+      }
+
+      analysisJsonDTO.addTerm(termDto);
     }
     final ObjectMapper objectMapper = new ObjectMapper();
     try {

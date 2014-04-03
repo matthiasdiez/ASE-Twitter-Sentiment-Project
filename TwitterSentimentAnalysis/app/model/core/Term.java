@@ -33,7 +33,7 @@ public class Term extends Model implements Identifiable {
   private List<Analysis> analyses;
 
   @OneToMany(mappedBy = "term")
-  private List<Result> results;
+  private List<SentimentResult> results;
 
   public Term(final String content) {
     this.content = content;
@@ -48,12 +48,12 @@ public class Term extends Model implements Identifiable {
     return content;
   }
 
-  public List<Result> getResults() {
+  public List<SentimentResult> getResults() {
     return ImmutableList.copyOf(results);
   }
 
-  public Result addResult(final Double value, final DateTime dateTime) {
-    final Result result = ResultFactory.INSTANCE.create(this, value, dateTime);
+  public SentimentResult addResult(final Double value, final DateTime dateTime) {
+    final SentimentResult result = ResultFactory.INSTANCE.create(this, value, dateTime);
     ResultRepository.INSTANCE.store(result);
     this.save();
     return result;

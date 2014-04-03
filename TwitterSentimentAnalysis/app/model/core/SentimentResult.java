@@ -12,7 +12,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-public class Result extends Model implements Identifiable {
+public class SentimentResult extends Model implements Identifiable {
 
   private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class Result extends Model implements Identifiable {
   @Required
   private final DateTime dateTime;
 
-  public Result(final Term term, final double value, final DateTime dateTime) {
+  public SentimentResult(final Term term, final double value, final DateTime dateTime) {
     this.term = term;
     this.value = roundValue(value);
     this.dateTime = dateTime;

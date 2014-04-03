@@ -6,13 +6,13 @@ import java.util.List;
 public class AnalysisJsonDTO {
 
 	public String name;
-	public List<TermJsonDTO> terms = new ArrayList<TermJsonDTO>();
+	public List<TermDto> terms = new ArrayList<TermDto>();
 
 	public AnalysisJsonDTO(String name) {
 		this.name = name;
 	}
 
-	public void addTerm(TermJsonDTO term) {
+	public void addTerm(TermDto term) {
 		terms.add(term);
 	}
 }
