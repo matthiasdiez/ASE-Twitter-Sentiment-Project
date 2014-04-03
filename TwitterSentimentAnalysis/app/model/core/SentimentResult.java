@@ -1,5 +1,7 @@
 package model.core;
 
+import java.util.Comparator;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -52,6 +54,21 @@ public class SentimentResult extends Model implements Identifiable {
 
   public DateTime getDateTime() {
     return dateTime;
+  }
+
+  public class DefaultComparator implements Comparator<SentimentResult> {
+
+    @Override
+    public int compare(final SentimentResult o1, final SentimentResult o2) {
+      if (o1.getDateTime().isBefore(o2.getDateTime())) {
+        return -1;
+      }
+      else if (o1.getDateTime().isAfter(o2.getDateTime())) {
+        return 1;
+      }
+      return 0;
+    }
+
   }
 
 }

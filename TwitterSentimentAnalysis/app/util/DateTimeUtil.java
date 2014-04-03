@@ -43,8 +43,7 @@ public class DateTimeUtil {
   }
 
   public static DateTime cut(final DateTime input) {
-    DateTime output = input.minusMillis(input.getMillisOfSecond());
-    output = output.minusSeconds(input.getSecondOfMinute());
-    return output.minusMinutes(input.getMinuteOfHour());
+    final DateTime output = input.minusMillis(input.getMillisOfSecond());
+    return output.minusSeconds(input.getSecondOfMinute());
   }
 }

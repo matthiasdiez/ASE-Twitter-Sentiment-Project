@@ -2,14 +2,15 @@ package controllers;
 
 import static play.data.Form.form;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import model.core.Analysis;
 import model.core.Customer;
 import model.core.SentimentResult;
 import model.core.Term;
-import model.dto.AnalysisJsonDTO;
+import model.dto.AnalysisDto;
 import model.dto.SentimentResultDto;
 import model.dto.TermDto;
 import model.repositories.AnalysisRepository;
@@ -27,8 +28,7 @@ import application.Constants;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 
 import controllers.authentication.CustomerAuthenticator;
 
@@ -66,31 +66,54 @@ public class AppController extends Controller {
   }
 
   private String createJson(final Analysis analysis) {
-    final AnalysisJsonDTO analysisJsonDTO = new AnalysisJsonDTO(analysis.getName());
+    final AnalysisDto analysisDto = new AnalysisDto(analysis.getName());
     for (final Term term : analysis.getTerms()) {
       final TermDto termDto = new TermDto(term.getContent());
 
-      final ListMultimap<DateTime, SentimentResult> resultsPerInterval = ArrayListMultimap.create();
-      for (final SentimentResult result : term.getResults()) {
-        resultsPerInterval.put(DateTimeUtil.cut(result.getDateTime()), result);
-      }
+      // final ListMultimap<DateTime, SentimentResult> resultsPerInterval =
+      // ArrayListMultimap.create();
+      // for (final SentimentResult result : term.getResults()) {
+      // resultsPerInterval.put(DateTimeUtil.cut(result.getDateTime()), result);
+      // }
+      //
+      // for (final Map.Entry<DateTime, Collection<SentimentResult>> entry :
+      // resultsPerInterval.asMap().entrySet()) {
+      // double average = 0;
+      // for (final SentimentResult r : entry.getValue()) {
+      // average += r.getValue();
+      // }
+      // average = average / entry.getValue().size();
+      //
+      // final SentimentResultDto resultDto = new
+      // SentimentResultDto(DateTimeUtil.toString(entry.getKey()), average);
+      // termDto.addResult(resultDto);
+      // }
+      final List<SentimentResult> results = Lists.newArrayList(term.getResults());
 
-      for (final Map.Entry<DateTime, Collection<SentimentResult>> entry : resultsPerInterval.asMap().entrySet()) {
-        double average = 0;
-        for (final SentimentResult r : entry.getValue()) {
-          average += r.getValue();
+      Collections.sort(results, new Comparator<SentimentResult>() {
+
+        @Override
+        public int compare(final SentimentResult o1, final SentimentResult o2) {
+          if (o1.getDateTime().isBefore(o2.getDateTime())) {
+            return -1;
+          }
+          else if (o1.getDateTime().isAfter(o2.getDateTime())) {
+            return 1;
+          }
+          return 0;
         }
-        average = average / entry.getValue().size();
+      });
 
-        final SentimentResultDto resultDto = new SentimentResultDto(DateTimeUtil.toString(entry.getKey()), average);
+      for (final SentimentResult result : results) {
+        final SentimentResultDto resultDto = new SentimentResultDto(DateTimeUtil.toString(result.getDateTime()), result.getValue());
         termDto.addResult(resultDto);
       }
 
-      analysisJsonDTO.addTerm(termDto);
+      analysisDto.addTerm(termDto);
     }
     final ObjectMapper objectMapper = new ObjectMapper();
     try {
-      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(analysisJsonDTO);
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(analysisDto);
     }
     catch (final JsonProcessingException e) {
       e.printStackTrace();

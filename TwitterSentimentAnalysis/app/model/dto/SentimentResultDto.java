@@ -1,5 +1,6 @@
 package model.dto;
 
+
 public class SentimentResultDto {
 
   public String timestamp;
