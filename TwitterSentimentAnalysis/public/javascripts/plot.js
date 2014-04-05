@@ -1,4 +1,4 @@
-$(function() {
+$(function draw() {
 	var plotdata = [];
 	$.getJSON( "/analysis/" + window.analysis_id + "/data", function( json ) {			
 		for (var i = 0; i < json.terms.length; i++) {
@@ -11,10 +11,11 @@ $(function() {
 				var datapoint = [data.timestamp, data.value];
 				datarow.data.push(datapoint);
 			}
+			//alert("plotdatachange");
 			plotdata.push(datarow);
 		}
 
-		$.plot(
+		var plot = $.plot(
 			// target
 			"#plot", 
 
@@ -31,7 +32,8 @@ $(function() {
 					min:0,
 					max: 1
 			  	},
-				lines: { show: true, fill: true },
+			  	series:{shadowSize: 0 }, // Drawing is faster without shadows
+				lines: { show: true, fill: false },
 				points: { show: true},
 		      	grid: { hoverable: true },
 		      	legend: { show: true },
@@ -41,7 +43,61 @@ $(function() {
 		      	}
 	  		}
 		);
+		
+		setVisibility();
+		
+		var updateInterval = 3000;
+		
+		function update() {
 
-		// Add the Flot version string to the footer
+			//alert("inUpdate");
+			draw();
+			//alert(plotdata);
+			//alert(updateInterval);
+			plot.setData(plotdata);
+			//plot.setupGrid();
+			// Since the axes change, we need to call plot.setupGrid()
+			
+			
+			plot.draw();
+			
+			setTimeout(draw, updateInterval);
+		}
+
+		
+		update();
+
 	});
 });
+
+
+function setVisibility() {
+	if(document.getElementsByClassName("flot-tick-label").length>20){
+		for(var i=0; i<document.getElementsByClassName("flot-tick-label").length;i++){
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility="hidden";
+		}
+		for(var i=0; i<document.getElementsByClassName("flot-tick-label").length;i=i+5){
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility="visible";
+		}
+	}
+	if(document.getElementsByClassName("flot-tick-label").length>100){
+		for(var i=0; i<document.getElementsByClassName("flot-tick-label").length;i++){
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility="hidden";
+		}
+		for(var i=0; i<document.getElementsByClassName("flot-tick-label").length;i=i+10){
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility="visible";
+		}
+	}
+	if(document.getElementsByClassName("flot-tick-label").length>1000){
+		for(var i=0; i<document.getElementsByClassName("flot-tick-label").length;i++){
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility="hidden";
+		}
+		for(var i=0; i<document.getElementsByClassName("flot-tick-label").length;i=i+100){
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility="visible";
+		}
+	}
+	//there should be a better way...to make the y tick label visible again
+	for(var i=(document.getElementsByClassName("flot-tick-label").length-1); i>(document.getElementsByClassName("flot-tick-label").length-7);i--){
+		document.getElementsByClassName("flot-tick-label")[i].style.visibility="visible";
+	}
+}
