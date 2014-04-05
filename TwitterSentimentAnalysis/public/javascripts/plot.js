@@ -50,17 +50,6 @@ $(function draw() {
 		
 		function update() {
 
-			//alert("inUpdate");
-			draw();
-			//alert(plotdata);
-			//alert(updateInterval);
-			plot.setData(plotdata);
-			//plot.setupGrid();
-			// Since the axes change, we need to call plot.setupGrid()
-			
-			
-			plot.draw();
-			
 			setTimeout(draw, updateInterval);
 		}
 
