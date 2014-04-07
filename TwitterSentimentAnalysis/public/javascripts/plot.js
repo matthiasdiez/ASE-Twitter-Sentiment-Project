@@ -1,6 +1,7 @@
 $(function draw() {
 	var plotdata = [];
 	$.getJSON("/analysis/" + window.analysis_id + "/data", function(json) {
+		$('#overallScore').empty()
 		for (var i = 0; i < json.terms.length; i++) {
 			var term = json.terms[i];
 			var datapoints = []
@@ -16,6 +17,7 @@ $(function draw() {
 			}
 			// alert("plotdatachange");
 			plotdata.push(datarow);
+			
 			$('#overallScore').append($("<h6>" + term.name + ": " + term.overallResult + "</h6>"))
 		}
 
