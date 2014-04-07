@@ -68,28 +68,8 @@ public class AppController extends Controller {
   private String createJson(final Analysis analysis) {
     final AnalysisDto analysisDto = new AnalysisDto(analysis.getName());
     for (final Term term : analysis.getTerms()) {
-      final TermDto termDto = new TermDto(term.getContent());
-
-      // final ListMultimap<DateTime, SentimentResult> resultsPerInterval =
-      // ArrayListMultimap.create();
-      // for (final SentimentResult result : term.getResults()) {
-      // resultsPerInterval.put(DateTimeUtil.cut(result.getDateTime()), result);
-      // }
-      //
-      // for (final Map.Entry<DateTime, Collection<SentimentResult>> entry :
-      // resultsPerInterval.asMap().entrySet()) {
-      // double average = 0;
-      // for (final SentimentResult r : entry.getValue()) {
-      // average += r.getValue();
-      // }
-      // average = average / entry.getValue().size();
-      //
-      // final SentimentResultDto resultDto = new
-      // SentimentResultDto(DateTimeUtil.toString(entry.getKey()), average);
-      // termDto.addResult(resultDto);
-      // }
+      final TermDto termDto = new TermDto(term.getContent(), term.getOverallResult());
       final List<SentimentResult> results = Lists.newArrayList(term.getResults());
-
       Collections.sort(results, new Comparator<SentimentResult>() {
 
         @Override
@@ -108,7 +88,6 @@ public class AppController extends Controller {
         final SentimentResultDto resultDto = new SentimentResultDto(DateTimeUtil.toString(result.getDateTime()), result.getValue());
         termDto.addResult(resultDto);
       }
-
       analysisDto.addTerm(termDto);
     }
     final ObjectMapper objectMapper = new ObjectMapper();

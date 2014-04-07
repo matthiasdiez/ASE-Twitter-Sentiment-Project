@@ -9,7 +9,9 @@ import javax.persistence.OneToMany;
 
 import model.base.Identifiable;
 import model.factories.ResultFactory;
+import model.factories.TweetFactory;
 import model.repositories.ResultRepository;
+import model.repositories.TweetRepository;
 
 import org.joda.time.DateTime;
 
@@ -21,41 +23,64 @@ import com.google.common.collect.ImmutableList;
 @Entity
 public class Term extends Model implements Identifiable {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @Id
-  private Long id;
+	@Id
+	private Long id;
 
-  @Required
-  private final String content;
+	@Required
+	private final String content;
 
-  @ManyToMany(mappedBy = "terms")
-  private List<Analysis> analyses;
+	@Required
+	private double overallResult;
 
-  @OneToMany(mappedBy = "term")
-  private List<SentimentResult> results;
+	@ManyToMany(mappedBy = "terms")
+	private List<Analysis> analyses;
 
-  public Term(final String content) {
-    this.content = content;
-  }
+	@OneToMany(mappedBy = "term")
+	private List<SentimentResult> results;
 
-  @Override
-  public Long getId() {
-    return id;
-  }
+	@OneToMany(mappedBy = "term")
+	private List<Tweet> tweets;
 
-  public String getContent() {
-    return content;
-  }
+	public Term(final String content) {
+		this.content = content;
+		this.overallResult = 0;
+	}
 
-  public List<SentimentResult> getResults() {
-    return ImmutableList.copyOf(results);
-  }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-  public SentimentResult addResult(final Double value, final DateTime dateTime) {
-    final SentimentResult result = ResultFactory.INSTANCE.create(this, value, dateTime);
-    ResultRepository.INSTANCE.store(result);
-    this.save();
-    return result;
-  }
+	public String getContent() {
+		return content;
+	}
+
+	public List<SentimentResult> getResults() {
+		return ImmutableList.copyOf(results);
+	}
+
+	public SentimentResult addResult(final Double value, final DateTime dateTime) {
+		final SentimentResult result = ResultFactory.INSTANCE.create(this, value, dateTime);
+		ResultRepository.INSTANCE.store(result);
+		this.save();
+		return result;
+	}
+
+	public Tweet addTweet(String tweetString, DateTime dateTime) {
+		final Tweet tweet = TweetFactory.INSTANCE.create(this, tweetString, dateTime);
+		TweetRepository.INSTANCE.store(tweet);
+		this.save();
+		return tweet;
+	}
+
+	public double getOverallResult() {
+		return overallResult;
+	}
+
+	public void setOverallResult(double overallResult) {
+		this.overallResult = overallResult;
+		this.save();
+	}
 }

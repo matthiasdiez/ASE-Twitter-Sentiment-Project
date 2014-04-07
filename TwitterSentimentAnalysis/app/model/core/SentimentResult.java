@@ -68,7 +68,5 @@ public class SentimentResult extends Model implements Identifiable {
       }
       return 0;
     }
-
   }
-
 }
