@@ -20,12 +20,10 @@
   
   <div class="row">
     <div class="col-12">
-  
 	    <h3>Terms</h3>
-	    
 	    <ul class="large fa-ul">
         @for(term <- analysis.getTerms()) {
-          <li><i class="fa-li fa fa-caret-right"></i>@term.getContent()</li>
+          <li><i class="fa-li fa fa-caret-right"></i>@term.getContent() - @(term.getOverallResult() - (term.getOverallResult() % 0.01))</li>
         }
       </ul>
 	    
@@ -35,10 +33,5 @@
         	<div id="plot"/>
       	</div>
 	  </div>
-	  <div>
-	  	<h5>Overall score</h5>
-	  	<div id="overallScore"></div>
-	  </div>
-  
   </div> 
 }

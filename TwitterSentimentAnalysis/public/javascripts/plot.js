@@ -1,7 +1,6 @@
 $(function draw() {
 	var plotdata = [];
 	$.getJSON("/analysis/" + window.analysis_id + "/data", function(json) {
-		$('#overallScore').empty()
 		for (var i = 0; i < json.terms.length; i++) {
 			var term = json.terms[i];
 			var datapoints = []
@@ -17,8 +16,6 @@ $(function draw() {
 			}
 			// alert("plotdatachange");
 			plotdata.push(datarow);
-			
-			$('#overallScore').append($("<h6>" + term.name + ": " + term.overallResult + "</h6>"))
 		}
 
 		var plot = $.plot(
@@ -46,7 +43,7 @@ $(function draw() {
 				fill : false
 			},
 			points : {
-				show : true
+				show : false
 			},
 			grid : {
 				hoverable : true
@@ -96,6 +93,14 @@ function setVisibility() {
 			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "hidden";
 		}
 		for (var i = 0; i < document.getElementsByClassName("flot-tick-label").length; i = i + 100) {
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "visible";
+		}
+	}
+	if (document.getElementsByClassName("flot-tick-label").length > 10000) {
+		for (var i = 0; i < document.getElementsByClassName("flot-tick-label").length; i++) {
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "hidden";
+		}
+		for (var i = 0; i < document.getElementsByClassName("flot-tick-label").length; i = i + 1000) {
 			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "visible";
 		}
 	}

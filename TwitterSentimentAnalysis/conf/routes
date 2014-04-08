@@ -13,6 +13,7 @@ POST   /analysis/create       @controllers.AppController.addAnalysis()
 GET    /analysis/:id          @controllers.AppController.displayAnalysis(id: Long)
 GET    /analysis/:id/start    @controllers.AppController.startAnalysis(id: Long)
 GET    /analysis/:id/finish   @controllers.AppController.finishAnalysis(id: Long)
+GET    /analysis/:id/resume   @controllers.AppController.resumeAnalysis(id: Long)
 GET    /analysis/:id/data     @controllers.AppController.getAnalysisData(id: Long)
 
 # Authentication

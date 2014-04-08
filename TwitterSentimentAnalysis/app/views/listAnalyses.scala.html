@@ -38,11 +38,14 @@
 			      </td>
 			      <td>
 			        @if(analysis.getStartDateTime() == null) {
-			          <a class="btn btn-sm btn-success" href="@routes.AppController.startAnalysis(analysis.getId())" role="button">Start</a> 
+			        	<a class="btn btn-sm btn-success" href="@routes.AppController.startAnalysis(analysis.getId())" role="button">Start</a> 
 			        }
 			        @if(analysis.getEndDateTime() == null && analysis.getStartDateTime() != null) {
-			          <a class="btn btn-sm btn-warning" href="@routes.AppController.finishAnalysis(analysis.getId())" role="button">Finish</a>
-              }
+			        	<a class="btn btn-sm btn-warning" href="@routes.AppController.finishAnalysis(analysis.getId())" role="button">Finish</a>
+			        }
+              		@if(analysis.getEndDateTime() != null && analysis.getEndDateTime().getMillis() < java.lang.System.currentTimeMillis()) {
+              			<a class="btn btn-sm btn-warning" href="@routes.AppController.resumeAnalysis(analysis.getId())" role="button">Resume</a>
+              		}
 			      </td>
 			    </tr>
 		    }

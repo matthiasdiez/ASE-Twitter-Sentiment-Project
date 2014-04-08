@@ -117,11 +117,8 @@ public class Analysis extends Model implements Identifiable {
 	}
 
 	public boolean setEndDateTime(final DateTime endDateTime) {
-		if (this.endDateTime == null) {
-			this.endDateTime = endDateTime;
-			return true;
-		}
-		return false;
+		this.endDateTime = endDateTime;
+		return true;
 	}
 
 	public boolean start() {
@@ -130,6 +127,11 @@ public class Analysis extends Model implements Identifiable {
 
 	public boolean finish() {
 		return setEndDateTime(DateTime.now());
+	}
+
+	public boolean resume() {
+		setEndDateTime(null);
+		return setStartDateTime(DateTime.now());
 	}
 
 	public boolean isActive() {
