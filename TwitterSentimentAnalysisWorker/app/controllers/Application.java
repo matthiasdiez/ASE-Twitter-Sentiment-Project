@@ -22,6 +22,10 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Application extends Controller {
 
+  public static Result index() {
+    return ok("Worker is running");
+  }
+
   public static Result run(final Long termId) {
     final Twitter twitter = getTwitter();
 
