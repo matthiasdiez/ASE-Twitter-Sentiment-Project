@@ -1,0 +1,54 @@
+/********
+ * BODY *
+ ********/
+
+body {
+	padding-top: 50px;
+}
+
+/**********
+ * NAVBAR *
+ **********/
+
+#navbar {
+	background-color: #205081;
+	border-color: #12385F;
+}
+
+#navbar * {
+	color: #FFFFFF;
+}
+
+#navbar #logo {
+	margin-right: 10px;
+	margin-top: -5px;
+}
+
+#navbar #brand-text {
+	margin-top: -12px;
+}
+
+#navbar ul li a:hover, #navbar .navbar-brand:hover {
+	background-color: #296CA3;
+}
+
+#navbar li.active a, #navbar li.active a:hover {
+	background-color: #12385F;
+}
+
+#navbar #user-label {
+	margin-top: 15px;
+	font-style: italic;
+}
+
+/********
+ * MAIN *
+ ********/
+ 
+ #main {
+  margin-top: 20px;
+}
+
+h1 {
+	margin-bottom: 20px;
+}

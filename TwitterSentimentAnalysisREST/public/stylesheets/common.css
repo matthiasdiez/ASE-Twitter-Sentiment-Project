@@ -1,0 +1,53 @@
+/*********
+ * forms *
+ *********/
+
+.form-group .errors {
+	color: #993333;
+}
+
+
+/******************
+ * padding/margin *
+ ******************/
+
+.margin-top {
+	margin-top: 10px;
+}
+
+.margin-bottom {
+  margin-top: 10px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.margin-right {
+  margin-top: 10px;
+}
+
+
+/************
+ * floating *
+ ************/
+ 
+.left {
+  float: right;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+/*********
+ * lists *
+ *********/
+ 
+ ul.large li {
+   font-size: 18px;
+ }

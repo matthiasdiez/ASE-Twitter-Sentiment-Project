@@ -1,0 +1,21 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+#main {
+  max-width: 330px;
+  margin: 0 auto;
+}
+
+#form-signin {
+	padding-top: 10px;
+}
+
+#authors {
+	margin-bottom: 50px;
+}
+
+#authors {
+	font-size: 18px;
+}

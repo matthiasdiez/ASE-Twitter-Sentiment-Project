@@ -1,8 +1,10 @@
 package application;
 
+import java.util.Timer;
+
 import play.Application;
 import play.GlobalSettings;
-import service.twitter.ServiceTimer;
+import service.twitter.TwitterFetcherTask;
 import application.modules.ProductionModule;
 
 import com.google.inject.Guice;
@@ -18,8 +20,8 @@ public class Global extends GlobalSettings {
 	@Override
 	public void onStart(final Application app) {
 		this.injector = createInjector();
-		ServiceTimer serviceTimer = new ServiceTimer();
-		serviceTimer.startTimerTask();
+		final Timer twitterFetcher = new Timer();
+		twitterFetcher.schedule(new TwitterFetcherTask(), 0, 60 * 1000);
 		super.onStart(app);
 	}
 
