@@ -1,6 +1,15 @@
 $(function draw() {
 	var plotdata = [];
 	$.getJSON("/analysis/" + window.analysis_id + "/data", function(json) {
+		for(var u=0;u<json.terms.length;u++){
+			var jterm = json.terms[u];
+			var termTimeSteps= [];
+			for (var k = 0; k < jterm.results.length; k++) {
+				var data = jterm.results[k];
+				termTimeSteps.push(data.timestamp);
+			}
+			timestamps.push(termTimeSteps);
+		}
 		for (var i = 0; i < json.terms.length; i++) {
 			var term = json.terms[i];
 			var datapoints = []
@@ -8,13 +17,29 @@ $(function draw() {
 				"label" : term.name,
 				"data" : datapoints
 			};
-
+			var tempTimeStep = "";
 			for (var j = 0; j < term.results.length; j++) {
 				var data = term.results[j];
-				var datapoint = [ data.timestamp, data.value ];
-				datarow.data.push(datapoint);
+				//add the data only in case all data-rows contain the timestamp
+				var isContained = true;
+				for(var t=0;t<timestamps.length;t++){
+					if(timestamps[t].indexOf(data.timestamp)<=-1){
+						isContained=false;
+					}
+				}
+				if(isContained){
+					//if there are more value for the same timestamp only the first one is used
+					if(tempTimeStep != data.timestamp){
+						var datapoint = [ data.timestamp, data.value ];
+						datarow.data.push(datapoint);
+						tempTimeStep= data.timestamp;
+					}
+				}
+				
+				
+				
+				
 			}
-			// alert("plotdatachange");
 			plotdata.push(datarow);
 		}
 
@@ -105,7 +130,7 @@ function setVisibility() {
 		}
 	}
 	// there should be a better way...to make the y tick label visible again
-	for (var i = (document.getElementsByClassName("flot-tick-label").length - 1); i > (document.getElementsByClassName("flot-tick-label").length - 7); i--) {
+	for (var i = (document.getElementsByClassName("flot-tick-label").length - 12); i > (document.getElementsByClassName("flot-tick-label").length - 7); i--) {
 		document.getElementsByClassName("flot-tick-label")[i].style.visibility = "visible";
 	}
 }
