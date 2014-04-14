@@ -12,6 +12,6 @@ db.default.url="jdbc:h2:mem:sentimentsanalysis;MODE=MYSQL;DB_CLOSE_DELAY=-1"
 # db.default.user=sa
 # db.default.password=""
 
-# config for MySQL
-# db.default.driver=com.mysql.jdbc.Driver
-# db.default.url="mysql://user:pw@localhost/dbname"
+applyEvolutions.default=true
+
+worker.url = "localhost:9001"

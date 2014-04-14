@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import model.core.Analysis;
 import model.core.Term;
 import model.repositories.AnalysisRepository;
+import play.Play;
 import play.libs.WS;
 
 public class TwitterFetcherTask extends TimerTask {
@@ -22,7 +23,8 @@ public class TwitterFetcherTask extends TimerTask {
       }
     }
     for (final Term term : activeTerms) {
-      WS.url("http://awseb-e-d-awsebloa-sa5puxjlfpjr-1662706129.eu-west-1.elb.amazonaws.com/run/" + term.getId()).get();
+      final String workerUrl = Play.application().configuration().getString("worker.url");
+      WS.url(workerUrl + "/run/" + term.getId()).get();
     }
     Thread.yield();
   }
