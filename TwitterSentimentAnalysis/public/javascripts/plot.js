@@ -1,12 +1,16 @@
 $(function draw() {
 	var plotdata = [];
+<<<<<<< Upstream, based on origin/master
 	var timestamps= [];
 	//The input is the sorted data collected from twitter about the terms in form of a json-file. 
 	//These data will be represented within a graph in a clear way to enable a comparison between the terms.
+=======
+	var timestamps = [];
+>>>>>>> 31fa381 final commit from my side...
 	$.getJSON("/analysis/" + window.analysis_id + "/data", function(json) {
-		for(var u=0;u<json.terms.length;u++){
+		for (var u = 0; u < json.terms.length; u++) {
 			var jterm = json.terms[u];
-			var termTimeSteps= [];
+			var termTimeSteps = [];
 			for (var k = 0; k < jterm.results.length; k++) {
 				var data = jterm.results[k];
 				termTimeSteps.push(data.timestamp);
@@ -23,24 +27,26 @@ $(function draw() {
 			var tempTimeStep = "";
 			for (var j = 0; j < term.results.length; j++) {
 				var data = term.results[j];
+<<<<<<< Upstream, based on origin/master
+=======
+				// add the data only in case all data-rows contain the timestamp
+>>>>>>> 31fa381 final commit from my side...
 				var isContained = true;
-				for(var t=0;t<timestamps.length;t++){
-					if(timestamps[t].indexOf(data.timestamp)<=-1){
-						isContained=false;
+				for (var t = 0; t < timestamps.length; t++) {
+					if (timestamps[t].indexOf(data.timestamp) <= -1) {
+						isContained = false;
 					}
 				}
-				if(isContained){
-					//if there are more value for the same timestamp only the first one is used
-					if(tempTimeStep != data.timestamp){
+				if (isContained) {
+					// if there are more value for the same timestamp only the
+					// first one is used
+					if (tempTimeStep != data.timestamp) {
 						var datapoint = [ data.timestamp, data.value ];
 						datarow.data.push(datapoint);
-						tempTimeStep= data.timestamp;
+						tempTimeStep = data.timestamp;
 					}
 				}
-				
-				
-				
-				
+
 			}
 			plotdata.push(datarow);
 		}
