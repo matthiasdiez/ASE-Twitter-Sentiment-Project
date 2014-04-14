@@ -1,12 +1,11 @@
 $(function draw() {
 	var plotdata = [];
-<<<<<<< Upstream, based on origin/master
 	var timestamps= [];
-	//The input is the sorted data collected from twitter about the terms in form of a json-file. 
-	//These data will be represented within a graph in a clear way to enable a comparison between the terms.
-=======
+	// The input is the sorted data collected from twitter about the terms in
+	// form of a json-file.
+	// These data will be represented within a graph in a clear way to enable a
+	// comparison between the terms.
 	var timestamps = [];
->>>>>>> 31fa381 final commit from my side...
 	$.getJSON("/analysis/" + window.analysis_id + "/data", function(json) {
 		for (var u = 0; u < json.terms.length; u++) {
 			var jterm = json.terms[u];
