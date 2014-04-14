@@ -1,5 +1,8 @@
 $(function draw() {
 	var plotdata = [];
+	var timestamps= [];
+	//The input is the sorted data collected from twitter about the terms in form of a json-file. 
+	//These data will be represented within a graph in a clear way to enable a comparison between the terms.
 	$.getJSON("/analysis/" + window.analysis_id + "/data", function(json) {
 		for(var u=0;u<json.terms.length;u++){
 			var jterm = json.terms[u];
@@ -20,7 +23,6 @@ $(function draw() {
 			var tempTimeStep = "";
 			for (var j = 0; j < term.results.length; j++) {
 				var data = term.results[j];
-				//add the data only in case all data-rows contain the timestamp
 				var isContained = true;
 				for(var t=0;t<timestamps.length;t++){
 					if(timestamps[t].indexOf(data.timestamp)<=-1){
@@ -126,6 +128,14 @@ function setVisibility() {
 			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "hidden";
 		}
 		for (var i = 0; i < document.getElementsByClassName("flot-tick-label").length; i = i + 1000) {
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "visible";
+		}
+	}
+	if (document.getElementsByClassName("flot-tick-label").length > 100000) {
+		for (var i = 0; i < document.getElementsByClassName("flot-tick-label").length; i++) {
+			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "hidden";
+		}
+		for (var i = 0; i < document.getElementsByClassName("flot-tick-label").length; i = i + 10000) {
 			document.getElementsByClassName("flot-tick-label")[i].style.visibility = "visible";
 		}
 	}
